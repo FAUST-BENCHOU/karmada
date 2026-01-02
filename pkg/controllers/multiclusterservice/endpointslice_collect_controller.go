@@ -96,14 +96,8 @@ func (c *EndpointSliceCollectController) Reconcile(ctx context.Context, req cont
 		return controllerruntime.Result{}, err
 	}
 
-	if !util.IsWorkContains(work.Spec.Workload.Manifests, multiClusterServiceGVK) {
-		return controllerruntime.Result{}, nil
-	}
-
-	if !work.DeletionTimestamp.IsZero() {
-		// The Provider Clusters' EndpointSlice will be deleted by multiclusterservice-controller, let's just ignore it
-		return controllerruntime.Result{}, nil
-	}
+	// The check for whether Work contains EndpointSlice resources has been moved to predicate logic.
+	// We don't need to watch update and deletion events, so DeletionTimestamp check is not needed here.
 
 	clusterName, err := names.GetClusterName(work.Namespace)
 	if err != nil {

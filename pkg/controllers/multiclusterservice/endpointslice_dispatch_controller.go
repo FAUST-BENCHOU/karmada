@@ -155,7 +155,7 @@ func (c *EndpointsliceDispatchController) SetupWithManager(mgr controllerruntime
 				util.GetLabelValue(updateEvent.ObjectNew.GetLabels(), util.ServiceNameLabel) != "") &&
 				util.GetAnnotationValue(updateEvent.ObjectNew.GetAnnotations(), util.EndpointSliceProvisionClusterAnnotation) == ""
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
+		DeleteFunc: func(_ event.DeleteEvent) bool {
 			// We don't need to watch the deletion event of the work object.
 			// The cleanup will be handled when the work is being deleted (DeletionTimestamp is set) via Update events.
 			return false

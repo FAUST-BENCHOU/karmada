@@ -136,11 +136,11 @@ func NewPredicateForEndpointSliceCollectController(mgr controllerruntime.Manager
 		CreateFunc: func(createEvent event.CreateEvent) bool {
 			return predFunc(createEvent.Object)
 		},
-		UpdateFunc: func(updateEvent event.UpdateEvent) bool {
+		UpdateFunc: func(_ event.UpdateEvent) bool {
 			// We don't need to watch update events of EndpointSlice Work
 			return false
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
+		DeleteFunc: func(_ event.DeleteEvent) bool {
 			// We don't need to watch deletion events of EndpointSlice Work
 			return false
 		},
@@ -224,11 +224,11 @@ func NewPredicateForEndpointSliceCollectControllerOnAgent(curClusterName string)
 		CreateFunc: func(createEvent event.CreateEvent) bool {
 			return predFunc(createEvent.Object)
 		},
-		UpdateFunc: func(updateEvent event.UpdateEvent) bool {
+		UpdateFunc: func(_ event.UpdateEvent) bool {
 			// We don't need to watch update events of EndpointSlice Work
 			return false
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
+		DeleteFunc: func(_ event.DeleteEvent) bool {
 			// We don't need to watch deletion events of EndpointSlice Work
 			return false
 		},

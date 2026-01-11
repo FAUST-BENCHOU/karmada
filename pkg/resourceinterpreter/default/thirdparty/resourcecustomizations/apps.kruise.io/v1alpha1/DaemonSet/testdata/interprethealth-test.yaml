@@ -4,7 +4,6 @@
 # case3: Not all updated pods are available
 # case4: Not all pods updated
 
-
 name: "DaemonSet interpreting health test"
 description: "Test interpreting health of DaemonSet"
 observedObj:

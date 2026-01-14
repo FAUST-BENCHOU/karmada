@@ -43,16 +43,15 @@ desiredObj:
                     key: lower
 operation: InterpretDependency
 output:
-  interpretdependency:
-    dependencies:
-      - apiVersion: v1
-        kind: ConfigMap
-        name: my-sample-config
-        namespace: test-kruise-daemonset
-      - apiVersion: v1
-        kind: ConfigMap
-        name: mysql-config
-        namespace: test-kruise-daemonset
+  dependencies:
+    - apiVersion: v1
+      kind: ConfigMap
+      name: my-sample-config
+      namespace: test-kruise-daemonset
+    - apiVersion: v1
+      kind: ConfigMap
+      name: mysql-config
+      namespace: test-kruise-daemonset
 ---
 # case2
 name: "DaemonSet with secret dependency"
@@ -83,12 +82,11 @@ desiredObj:
                     key: password
 operation: InterpretDependency
 output:
-  interpretdependency:
-    dependencies:
-      - apiVersion: v1
-        kind: Secret
-        name: my-secret
-        namespace: test-kruise-daemonset
+  dependencies:
+    - apiVersion: v1
+      kind: Secret
+      name: my-secret
+      namespace: test-kruise-daemonset
 ---
 # case3
 name: "DaemonSet with multiple containers sharing configmap"
@@ -127,9 +125,8 @@ desiredObj:
                     key: cba
 operation: InterpretDependency
 output:
-  interpretdependency:
-    dependencies:
-      - apiVersion: v1
-        kind: ConfigMap
-        name: shared-config
-        namespace: test-kruise-daemonset
+  dependencies:
+    - apiVersion: v1
+      kind: ConfigMap
+      name: shared-config
+      namespace: test-kruise-daemonset        

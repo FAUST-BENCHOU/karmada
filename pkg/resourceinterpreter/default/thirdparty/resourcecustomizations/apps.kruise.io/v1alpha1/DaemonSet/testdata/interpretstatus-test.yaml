@@ -55,7 +55,7 @@ observedObj:
     numberUnavailable: 0 
 operation: InterpretStatus
 output:
-  interpretstatus:
+  status:
     observedGeneration: 1
     currentNumberScheduled: 1
     numberMisscheduled: 0

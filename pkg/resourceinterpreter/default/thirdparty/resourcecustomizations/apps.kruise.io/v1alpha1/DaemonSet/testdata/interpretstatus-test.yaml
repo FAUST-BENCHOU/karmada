@@ -94,7 +94,7 @@ observedObj:
             image: nginx:alpine
 operation: InterpretStatus
 output:
-  interpretstatus: {}
+  status: {}
 ---
 # Case 3:
 name: "DaemonSet: interpret status test - mixed generation members"
@@ -132,8 +132,9 @@ observedObj:
     resourceTemplateGeneration: 2
     daemonSetHash: hash-a
 
-expectedOutput:
-  interpretstatus:
+operation: InterpretStatus
+output:
+  status:
     generation: 2
     observedGeneration: 1
     resourceTemplateGeneration: 2
@@ -144,4 +145,3 @@ expectedOutput:
     updatedNumberScheduled: 1
     numberMisscheduled: 0
     daemonSetHash: hash-a
-

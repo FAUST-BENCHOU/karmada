@@ -110,8 +110,14 @@ func NewPredicateForServiceExportController(mgr controllerruntime.Manager) predi
 
 // NewPredicateForEndpointSliceCollectController generates an event filter function for EndpointSliceCollectController running by karmada-controller-manager.
 func NewPredicateForEndpointSliceCollectController(mgr controllerruntime.Manager) predicate.Funcs {
-	predFunc := func(_ string, object client.Object) bool {
+	predFunc := func(object client.Object) bool {
 		obj := object.(*workv1alpha1.Work)
+
+		// Check if the Work contains EndpointSlice resources
+		if !util.IsWorkContains(obj.Spec.Workload.Manifests, util.EndpointSliceGVK) {
+			return false
+		}
+
 		clusterName, err := names.GetClusterName(obj.GetNamespace())
 		if err != nil {
 			klog.Errorf("Failed to get member cluster name for work %s/%s", obj.GetNamespace(), obj.GetName())
@@ -128,13 +134,15 @@ func NewPredicateForEndpointSliceCollectController(mgr controllerruntime.Manager
 
 	return predicate.Funcs{
 		CreateFunc: func(createEvent event.CreateEvent) bool {
-			return predFunc("create", createEvent.Object)
+			return predFunc(createEvent.Object)
 		},
-		UpdateFunc: func(updateEvent event.UpdateEvent) bool {
-			return predFunc("update", updateEvent.ObjectNew) || predFunc("update", updateEvent.ObjectOld)
+		UpdateFunc: func(_ event.UpdateEvent) bool {
+			// We don't need to watch update events of EndpointSlice Work
+			return false
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
-			return predFunc("delete", deleteEvent.Object)
+		DeleteFunc: func(_ event.DeleteEvent) bool {
+			// We don't need to watch deletion events of EndpointSlice Work
+			return false
 		},
 		GenericFunc: func(event.GenericEvent) bool {
 			return false
@@ -196,8 +204,14 @@ func NewPredicateForServiceExportControllerOnAgent(curClusterName string) predic
 
 // NewPredicateForEndpointSliceCollectControllerOnAgent generates an event filter function for EndpointSliceCollectController running by karmada-agent.
 func NewPredicateForEndpointSliceCollectControllerOnAgent(curClusterName string) predicate.Funcs {
-	predFunc := func(_ string, object client.Object) bool {
+	predFunc := func(object client.Object) bool {
 		obj := object.(*workv1alpha1.Work)
+
+		// Check if the Work contains EndpointSlice resources
+		if !util.IsWorkContains(obj.Spec.Workload.Manifests, util.EndpointSliceGVK) {
+			return false
+		}
+
 		clusterName, err := names.GetClusterName(obj.GetNamespace())
 		if err != nil {
 			klog.Errorf("Failed to get member cluster name for work %s/%s", obj.GetNamespace(), obj.GetName())
@@ -208,13 +222,15 @@ func NewPredicateForEndpointSliceCollectControllerOnAgent(curClusterName string)
 
 	return predicate.Funcs{
 		CreateFunc: func(createEvent event.CreateEvent) bool {
-			return predFunc("create", createEvent.Object)
+			return predFunc(createEvent.Object)
 		},
-		UpdateFunc: func(updateEvent event.UpdateEvent) bool {
-			return predFunc("update", updateEvent.ObjectNew) || predFunc("update", updateEvent.ObjectOld)
+		UpdateFunc: func(_ event.UpdateEvent) bool {
+			// We don't need to watch update events of EndpointSlice Work
+			return false
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
-			return predFunc("delete", deleteEvent.Object)
+		DeleteFunc: func(_ event.DeleteEvent) bool {
+			// We don't need to watch deletion events of EndpointSlice Work
+			return false
 		},
 		GenericFunc: func(event.GenericEvent) bool {
 			return false

@@ -60,6 +60,8 @@ jobs:
         run: hack/verify-swagger-docs.sh
       - name: verify lifted docs
         run: hack/verify-lifted.sh
+      - name: verify command-line flags
+        run: hack/verify-command-line-flags.sh
   build:
     name: compile
     needs: codegen # rely on codegen successful completion

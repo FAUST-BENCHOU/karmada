@@ -26,6 +26,7 @@ go build -o "${REPO_ROOT}/_tmp/extract-flags" "${REPO_ROOT}/hack/tools/extract-f
 
 # Run the tool to generate flags documentation
 echo "Extracting command-line flags from all components..."
-"${REPO_ROOT}/_tmp/extract-flags" > "${REPO_ROOT}/doc/command-line-flags.txt"
+mkdir -p "${REPO_ROOT}/docs/command-flags"
+"${REPO_ROOT}/_tmp/extract-flags" -output-dir "${REPO_ROOT}/docs/command-flags"
 
-echo "Command-line flags documentation generated: doc/command-line-flags.txt"
+echo "Command-line flags documentation generated: docs/command-flags/"

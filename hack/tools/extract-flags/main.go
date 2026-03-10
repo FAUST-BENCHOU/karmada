@@ -19,21 +19,32 @@ package main
 import (
 	"bytes"
 	"context"
+	"flag"
 	"fmt"
 	"maps"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	controllerruntime "sigs.k8s.io/controller-runtime"
 
+	aggregatedapiserverapp "github.com/karmada-io/karmada/cmd/aggregated-apiserver/app"
 	controllermanagerapp "github.com/karmada-io/karmada/cmd/controller-manager/app"
+	deschedulerapp "github.com/karmada-io/karmada/cmd/descheduler/app"
+	karmadasearchapp "github.com/karmada-io/karmada/cmd/karmada-search/app"
+	metricsadapterapp "github.com/karmada-io/karmada/cmd/metrics-adapter/app"
+	schedulerestimatorapp "github.com/karmada-io/karmada/cmd/scheduler-estimator/app"
+	schedulerapp "github.com/karmada-io/karmada/cmd/scheduler/app"
+	webhookapp "github.com/karmada-io/karmada/cmd/webhook/app"
+	"github.com/karmada-io/karmada/pkg/karmadactl"
 )
 
 type component struct {
-	name    string
-	command func(context.Context) *cobra.Command
+	name               string
+	command            func(context.Context) *cobra.Command
+	includeSubcommands bool
 }
 
 var components = []component{
@@ -41,132 +52,134 @@ var components = []component{
 		name:    "karmada-controller-manager",
 		command: controllermanagerapp.NewControllerManagerCommand,
 	},
+	{
+		name: "karmada-scheduler",
+		command: func(ctx context.Context) *cobra.Command {
+			return schedulerapp.NewSchedulerCommand(ctx)
+		},
+	},
+	{
+		name: "karmada-search",
+		command: func(ctx context.Context) *cobra.Command {
+			return karmadasearchapp.NewKarmadaSearchCommand(ctx)
+		},
+	},
+	{
+		name:    "karmada-webhook",
+		command: webhookapp.NewWebhookCommand,
+	},
+	{
+		name:    "karmada-aggregated-apiserver",
+		command: aggregatedapiserverapp.NewAggregatedApiserverCommand,
+	},
+	{
+		name:    "karmada-descheduler",
+		command: deschedulerapp.NewDeschedulerCommand,
+	},
+	{
+		name:    "karmada-metrics-adapter",
+		command: metricsadapterapp.NewMetricsAdapterCommand,
+	},
+	{
+		name:    "karmada-scheduler-estimator",
+		command: schedulerestimatorapp.NewSchedulerEstimatorCommand,
+	},
+	{
+		name: "karmadactl",
+		command: func(context.Context) *cobra.Command {
+			return karmadactl.NewKarmadaCtlCommand("karmadactl", "karmadactl")
+		},
+		includeSubcommands: true,
+	},
 }
 
-// extractDeprecatedFlags extracts deprecated flags from a command
-func extractDeprecatedFlags(cmd *cobra.Command) map[string]string {
-	deprecated := make(map[string]string)
-	cmd.Flags().VisitAll(func(flag *pflag.Flag) {
-		if flag.Deprecated != "" {
-			deprecated[flag.Name] = flag.Deprecated
+// formatDeprecatedFlags extracts and formats deprecated flags from a command and its subcommands.
+func formatDeprecatedFlags(cmd *cobra.Command) string {
+	var collect func(*cobra.Command) map[string]string
+	collect = func(c *cobra.Command) map[string]string {
+		deprecated := make(map[string]string)
+		c.Flags().VisitAll(func(flag *pflag.Flag) {
+			if flag.Deprecated != "" {
+				deprecated[flag.Name] = flag.Deprecated
+			}
+		})
+		for _, sub := range c.Commands() {
+			maps.Copy(deprecated, collect(sub))
 		}
-	})
-	// Also check subcommands
-	for _, subCmd := range cmd.Commands() {
-		subDeprecated := extractDeprecatedFlags(subCmd)
-		maps.Copy(deprecated, subDeprecated)
+		return deprecated
 	}
-	return deprecated
-}
-
-// formatDeprecatedFlags formats deprecated flags information
-func formatDeprecatedFlags(deprecated map[string]string) string {
+	deprecated := collect(cmd)
 	if len(deprecated) == 0 {
 		return ""
 	}
 	var lines []string
-	lines = append(lines, "")
-	lines = append(lines, "Deprecated flags:")
-	lines = append(lines, "")
-	for flagName, deprecationMsg := range deprecated {
-		lines = append(lines, fmt.Sprintf("      [DEPRECATED] --%s", flagName))
-		lines = append(lines, fmt.Sprintf("                           %s", deprecationMsg))
-		lines = append(lines, "")
+	lines = append(lines, "", "Deprecated flags:", "")
+	for flagName, msg := range deprecated {
+		lines = append(lines, fmt.Sprintf("      [DEPRECATED] --%s", flagName), fmt.Sprintf("                           %s", msg), "")
 	}
 	return strings.Join(lines, "\n")
 }
 
-func extractFlagsFromHelp(helpOutput string) string {
-	lines := strings.Split(helpOutput, "\n")
-	var flagLines []string
-	inFlagsSection := false
-
-	for _, line := range lines {
-		trimmed := strings.TrimSpace(line)
-
-		// Skip empty lines at the beginning
-		if !inFlagsSection && trimmed == "" {
+func collectSubcommandHelp(cmd *cobra.Command, path string, out *strings.Builder) {
+	for _, sub := range cmd.Commands() {
+		if sub.Hidden {
 			continue
 		}
-
-		// Start capturing when we see a flag section header
-		if strings.HasSuffix(trimmed, "flags:") && !strings.Contains(trimmed, "Usage:") {
-			inFlagsSection = true
-			flagLines = append(flagLines, line)
+		subPath := path + " " + sub.Name()
+		var buf bytes.Buffer
+		sub.SetOut(&buf)
+		sub.SetErr(&buf)
+		if err := sub.Help(); err != nil {
 			continue
 		}
-
-		// Stop if we hit subcommands or help topics
-		if inFlagsSection {
-			if strings.HasPrefix(trimmed, "Available Commands:") ||
-				strings.HasPrefix(trimmed, "Use \"") ||
-				strings.HasPrefix(trimmed, "Additional help topics:") {
-				break
-			}
-			flagLines = append(flagLines, line)
+		out.WriteString("\n\n")
+		out.WriteString("=== " + subPath + " ===\n\n")
+		out.Write(buf.Bytes())
+		if s := formatDeprecatedFlags(sub); s != "" {
+			out.WriteString(s)
 		}
+		collectSubcommandHelp(sub, subPath, out)
 	}
-
-	return strings.Join(flagLines, "\n")
 }
 
 func main() {
+	outputDir := flag.String("output-dir", "", "Directory to write flag files (e.g., docs/command-flags)")
+	flag.Parse()
+
+	if *outputDir == "" {
+		fmt.Fprintln(os.Stderr, "Error: -output-dir is required")
+		os.Exit(1)
+	}
+
 	ctx := controllerruntime.SetupSignalHandler()
-	var output strings.Builder
 
-	output.WriteString("Usage:\n   [flags]\n\n")
-
-	for i, comp := range components {
-		if i > 0 {
-			output.WriteString("\n")
-		}
+	for _, comp := range components {
+		cmd := comp.command(ctx)
+		var content []byte
 
 		var buf bytes.Buffer
-		cmd := comp.command(ctx)
 		cmd.SetOut(&buf)
 		cmd.SetErr(&buf)
-
-		// Call Help() to get formatted help output
 		if err := cmd.Help(); err != nil {
 			fmt.Fprintf(os.Stderr, "Error getting help for %s: %v\n", comp.name, err)
 			continue
 		}
-
-		helpOutput := buf.String()
-		flagsSection := extractFlagsFromHelp(helpOutput)
-
-		// Extract deprecated flags
-		deprecatedFlags := extractDeprecatedFlags(cmd)
-		deprecatedSection := formatDeprecatedFlags(deprecatedFlags)
-
-		if flagsSection != "" {
-			// Add component name as header
-			output.WriteString(fmt.Sprintf("%s flags:\n\n", comp.name))
-			output.WriteString(flagsSection)
-
-			// Add deprecated flags section if any
-			if deprecatedSection != "" {
-				output.WriteString("\n")
-				output.WriteString(deprecatedSection)
-			}
-
-			output.WriteString("\n")
-		} else {
-			// Fallback: try to extract from the entire help output
-			fmt.Fprintf(os.Stderr, "Warning: Could not extract flags section for %s, using full help output\n", comp.name)
-			output.WriteString(fmt.Sprintf("%s flags:\n\n", comp.name))
-			output.WriteString(helpOutput)
-
-			// Add deprecated flags section if any
-			if deprecatedSection != "" {
-				output.WriteString("\n")
-				output.WriteString(deprecatedSection)
-			}
-
-			output.WriteString("\n")
+		content = buf.Bytes()
+		if s := formatDeprecatedFlags(cmd); s != "" {
+			content = append(content, []byte(s)...)
 		}
-	}
+		if comp.includeSubcommands {
+			var out strings.Builder
+			out.Write(content)
+			collectSubcommandHelp(cmd, comp.name, &out)
+			content = []byte(out.String())
+		}
 
-	// Write to stdout
-	fmt.Print(output.String())
+		outputPath := filepath.Join(*outputDir, comp.name+".txt")
+		if err := os.WriteFile(outputPath, content, 0o600); err != nil {
+			fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", outputPath, err)
+			os.Exit(1)
+		}
+		fmt.Printf("Wrote %s\n", outputPath)
+	}
 }

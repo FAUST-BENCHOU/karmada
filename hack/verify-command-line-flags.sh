@@ -19,9 +19,8 @@ set -o nounset
 set -o pipefail
 
 SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
-
-DIFFROOT="${SCRIPT_ROOT}/doc/command-line-flags.txt"
-TMP_DIFFROOT="${SCRIPT_ROOT}/_tmp/command-line-flags.txt"
+DIFFROOT="${SCRIPT_ROOT}/docs/command-flags"
+TMP_DIFFROOT="${SCRIPT_ROOT}/_tmp/docs/command-flags"
 _tmp="${SCRIPT_ROOT}/_tmp"
 
 cleanup() {
@@ -31,23 +30,48 @@ trap "cleanup" EXIT SIGINT
 
 cleanup
 
-mkdir -p "${SCRIPT_ROOT}/_tmp"
+mkdir -p "${TMP_DIFFROOT}"
 
 # Generate flags documentation to temporary location
 echo "Generating command-line flags documentation..."
 go build -o "${SCRIPT_ROOT}/_tmp/extract-flags" "${SCRIPT_ROOT}/hack/tools/extract-flags/main.go"
-"${SCRIPT_ROOT}/_tmp/extract-flags" > "${TMP_DIFFROOT}"
+"${SCRIPT_ROOT}/_tmp/extract-flags" -output-dir "${TMP_DIFFROOT}" > /dev/null
 
-echo "diffing ${DIFFROOT} against freshly generated flags documentation"
 ret=0
-diff -Naupr "${DIFFROOT}" "${TMP_DIFFROOT}" || ret=$?
-if [[ $ret -eq 0 ]]
-then
-  echo "${DIFFROOT} is up to date."
+for file in "${DIFFROOT}"/*.txt; do
+  if [[ ! -f "${file}" ]]; then
+    continue
+  fi
+  filename=$(basename "${file}")
+  tmpfile="${TMP_DIFFROOT}/${filename}"
+  if [[ ! -f "${tmpfile}" ]]; then
+    echo "Missing generated file: ${tmpfile}"
+    ret=1
+    continue
+  fi
+  echo "Diffing ${file} against freshly generated flags documentation"
+  if ! diff -Naupr "${file}" "${tmpfile}"; then
+    ret=1
+  fi
+done
+
+# Check for new components: files in tmp but not in docs
+for file in "${TMP_DIFFROOT}"/*.txt; do
+  if [[ ! -f "${file}" ]]; then
+    continue
+  fi
+  filename=$(basename "${file}")
+  docfile="${DIFFROOT}/${filename}"
+  if [[ ! -f "${docfile}" ]]; then
+    echo "New component flags file not in docs: ${filename}"
+    echo "Please run hack/update-command-line-flags.sh"
+    ret=1
+  fi
+done
+
+if [[ $ret -eq 0 ]]; then
+  echo "Command-line flags documentation is up to date."
 else
-  echo "${DIFFROOT} is out of date. Please run hack/generate-command-line-flags.sh"
-  echo ""
-  echo "Diff:"
-  diff -Naupr "${DIFFROOT}" "${TMP_DIFFROOT}" || true
+  echo "Command-line flags documentation is out of date. Please run hack/update-command-line-flags.sh"
   exit 1
 fi

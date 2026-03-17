@@ -19,15 +19,16 @@ package main
 import (
 	"bytes"
 	"context"
-	"flag"
 	"fmt"
 	"maps"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
+	cliflag "k8s.io/component-base/cli/flag"
 	controllerruntime "sigs.k8s.io/controller-runtime"
 
 	aggregatedapiserverapp "github.com/karmada-io/karmada/cmd/aggregated-apiserver/app"
@@ -112,10 +113,15 @@ func formatDeprecatedFlags(cmd *cobra.Command) string {
 	if len(deprecated) == 0 {
 		return ""
 	}
+	names := make([]string, 0, len(deprecated))
+	for name := range deprecated {
+		names = append(names, name)
+	}
+	sort.Strings(names)
 	var lines []string
 	lines = append(lines, "", "Deprecated flags:", "")
-	for flagName, msg := range deprecated {
-		lines = append(lines, fmt.Sprintf("      [DEPRECATED] --%s", flagName), fmt.Sprintf("                           %s", msg), "")
+	for _, flagName := range names {
+		lines = append(lines, fmt.Sprintf("      [DEPRECATED] --%s", flagName), fmt.Sprintf("                           %s", deprecated[flagName]), "")
 	}
 	return strings.Join(lines, "\n")
 }
@@ -143,19 +149,22 @@ func collectSubcommandHelp(cmd *cobra.Command, path string, out *strings.Builder
 }
 
 func main() {
-	outputDir := flag.String("output-dir", "", "Directory to write flag files (e.g., docs/command-flags)")
-	flag.Parse()
-
-	if *outputDir == "" {
-		fmt.Fprintln(os.Stderr, "Error: -output-dir is required")
+	if len(os.Args) < 2 {
+		fmt.Fprintln(os.Stderr, "Usage: extract-flags <output-dir>")
+		fmt.Fprintln(os.Stderr, "  e.g. extract-flags docs/command-flags")
 		os.Exit(1)
 	}
+	outputDir := os.Args[1]
 
 	ctx := controllerruntime.SetupSignalHandler()
 
 	for _, comp := range components {
 		cmd := comp.command(ctx)
 		var content []byte
+
+		cmd.InitDefaultHelpCmd()
+		cmd.InitDefaultCompletionCmd()
+		cmd.SetGlobalNormalizationFunc(cliflag.WordSepNormalizeFunc)
 
 		var buf bytes.Buffer
 		cmd.SetOut(&buf)
@@ -175,7 +184,7 @@ func main() {
 			content = []byte(out.String())
 		}
 
-		outputPath := filepath.Join(*outputDir, comp.name+".txt")
+		outputPath := filepath.Join(outputDir, comp.name+".txt")
 		if err := os.WriteFile(outputPath, content, 0o600); err != nil {
 			fmt.Fprintf(os.Stderr, "Error writing %s: %v\n", outputPath, err)
 			os.Exit(1)

@@ -18,10 +18,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
-DIFFROOT="${SCRIPT_ROOT}/docs/command-flags"
-TMP_DIFFROOT="${SCRIPT_ROOT}/_tmp/docs/command-flags"
-_tmp="${SCRIPT_ROOT}/_tmp"
+REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+DIFFROOT="${REPO_ROOT}/docs/command-flags"
+TMP_DIFFROOT="${REPO_ROOT}/_tmp/docs/command-flags"
+_tmp="${REPO_ROOT}/_tmp"
 
 cleanup() {
   rm -rf "${_tmp}"
@@ -30,12 +30,14 @@ trap "cleanup" EXIT SIGINT
 
 cleanup
 
+cd "${REPO_ROOT}"
 mkdir -p "${TMP_DIFFROOT}"
 
 # Generate flags documentation to temporary location
+# Use LANG=C to ensure English output (kubectl i18n uses LANG/LC_MESSAGES for translations)
 echo "Generating command-line flags documentation..."
-go build -o "${SCRIPT_ROOT}/_tmp/extract-flags" "${SCRIPT_ROOT}/hack/tools/extract-flags/main.go"
-"${SCRIPT_ROOT}/_tmp/extract-flags" -output-dir "${TMP_DIFFROOT}" > /dev/null
+go build -o "${REPO_ROOT}/_tmp/extract-flags" "${REPO_ROOT}/hack/tools/extract-flags/main.go"
+LANG=C "${REPO_ROOT}/_tmp/extract-flags" "${TMP_DIFFROOT}"
 
 ret=0
 for file in "${DIFFROOT}"/*.txt; do

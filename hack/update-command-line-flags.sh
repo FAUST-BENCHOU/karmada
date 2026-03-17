@@ -18,6 +18,7 @@ set -o nounset
 set -o pipefail
 
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+OUTPUT_DIR="${REPO_ROOT}/docs/command-flags"
 
 # Build the flag extraction tool
 echo "Building flag extraction tool..."
@@ -25,8 +26,9 @@ cd "${REPO_ROOT}"
 go build -o "${REPO_ROOT}/_tmp/extract-flags" "${REPO_ROOT}/hack/tools/extract-flags/main.go"
 
 # Run the tool to generate flags documentation
+# Use LANG=C to ensure English output (kubectl i18n uses LANG/LC_MESSAGES for translations)
 echo "Extracting command-line flags from all components..."
-mkdir -p "${REPO_ROOT}/docs/command-flags"
-"${REPO_ROOT}/_tmp/extract-flags" -output-dir "${REPO_ROOT}/docs/command-flags"
+mkdir -p "${OUTPUT_DIR}"
+LANG=C "${REPO_ROOT}/_tmp/extract-flags" "${OUTPUT_DIR}"
 
 echo "Command-line flags documentation generated: docs/command-flags/"

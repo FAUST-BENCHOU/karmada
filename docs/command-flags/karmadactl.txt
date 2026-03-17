@@ -5,7 +5,7 @@ Basic Commands:
   get             Display one or many resources in Karmada control plane and member clusters.
   create          Create a resource from a file or from stdin
   delete          Delete resources by file names, stdin, resources and names, or by resources and label selector
-  edit            编辑服务器上的资源
+  edit            Edit a resource on the server
 
 Cluster Registration Commands:
   init            Install the Karmada control plane in a Kubernetes cluster
@@ -36,8 +36,8 @@ Advanced Commands:
   patch           Update fields of a resource
 
 Settings Commands:
-  label           更新某资源上的标签
-  annotate        更新一个资源的注解
+  label           Update the labels on a resource
+  annotate        Update the annotations on a resource
   completion      Output shell completion code for the specified shell (bash, zsh, fish)
 
 Other Commands:
@@ -110,7 +110,8 @@ Examples:
 
 Options:
     -C, --cluster='':
-	Name of the member cluster that enables or disables the scheduler estimator.
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
 
     --context='':
 	The name of the kubeconfig context to use.
@@ -170,7 +171,8 @@ Options:
 	Wait apiservice ready timeout.
 
     -C, --cluster='':
-	Name of the member cluster that enables or disables the scheduler estimator.
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
 
     --context='':
 	The name of the kubeconfig context to use.
@@ -182,7 +184,8 @@ Options:
 	The priority class name for the component karmada-scheduler-estimator.
 
     --host-cluster-domain='cluster.local':
-	The cluster domain of karmada host cluster. (e.g. --host-cluster-domain=host.karmada)
+	The cluster domain of karmada host cluster. (e.g.
+	--host-cluster-domain=host.karmada)
 
     --karmada-context='':
 	The name of the karmada control plane kubeconfig context to use.
@@ -233,8 +236,9 @@ Options:
 	Wait pod ready timeout.
 
     --private-image-registry='':
-	Private image registry where pull images from. If set, all required images will be downloaded from it, it
-	would be useful in offline installation scenarios.
+	Private image registry where pull images from. If set, all required
+	images will be downloaded from it, it would be useful in offline
+	installation scenarios.
 
     --search-priority-class='system-node-critical':
 	The priority class name for the component karmada-search.
@@ -267,7 +271,8 @@ Examples:
 
 Options:
     -C, --cluster='':
-	Name of the member cluster that enables or disables the scheduler estimator.
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
 
     --context='':
 	The name of the kubeconfig context to use.
@@ -323,28 +328,33 @@ Examples:
 
 Options:
     --all=false:
-	Select all resources, in the namespace of the specified resource types.
+	Select all resources, in the namespace of the specified resource
+	types.
 
     -A, --all-namespaces=false:
 	If true, check the specified action in all namespaces.
 
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-annotate':
 	Name of the manager used to track field ownership.
 
     --field-selector='':
-	Selector (field query) to filter on, supports '=', '==', and '!='.(e.g. --field-selector
-	key1=value1,key2=value2). The server only supports a limited number of field queries per type.
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
 
     -f, --filename=[]:
-	Filename, directory, or URL to files identifying the resource to update the annotation
+	Filename, directory, or URL to files identifying the resource to
+	update the annotation
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -353,7 +363,8 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     --list=false:
 	If true, display the annotations for a given resource.
@@ -365,31 +376,37 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --overwrite=false:
-	If true, allow annotations to be overwritten, otherwise reject annotation updates that overwrite existing
-	annotations.
+	If true, allow annotations to be overwritten, otherwise reject
+	annotation updates that overwrite existing annotations.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --resource-version='':
-	如果非空，则只有当所给值是对象的当前资源版本时，注解更新才会成功。 仅在指定单个资源时有效。
+	If non-empty, the annotation update will only succeed if this is the
+	current resource-version for the object. Only valid when specifying a
+	single resource.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
 Usage:
   karmadactl annotate [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
@@ -436,8 +453,9 @@ Options:
 	Limit to resources that belong to the specified categories.
 
     --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is members,
-	for example: --operation-scope=members --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -446,23 +464,27 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     --namespaced=true:
-	If false, non-namespaced resources will be returned, otherwise returning namespaced resources by default.
+	If false, non-namespaced resources will be returned, otherwise
+	returning namespaced resources by default.
 
     --no-headers=false:
-	When using the default or custom-column output format, don't print headers (default print headers).
+	When using the default or custom-column output format, don't print
+	headers (default print headers).
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
     -o, --output='':
 	Output format. One of: (json, yaml, kyaml, name, wide).
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --sort-by='':
-	If non-empty, sort list of resources using specified field. The field can be either 'name' or 'kind'.
+	If non-empty, sort list of resources using specified field. The field
+	can be either 'name' or 'kind'.
 
     --verbs=[]:
 	Limit to resources that support the specified verbs.
@@ -486,8 +508,9 @@ Examples:
 
 Options:
     --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is members,
-	for example: --operation-scope=members --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -496,8 +519,8 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
 Usage:
   karmadactl api-versions [options]
@@ -537,19 +560,22 @@ Options:
 	If present, propagates a group of resources to all member clusters.
 
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --cascade='background':
-	Must be "background", "orphan", or "foreground". Selects the deletion cascading strategy for the dependents
-	(e.g. Pods created by a ReplicationController). Defaults to background.
+	Must be "background", "orphan", or "foreground". Selects the deletion
+	cascading strategy for the dependents (e.g. Pods created by a
+	ReplicationController). Defaults to background.
 
     -C, --cluster=[]:
 	If present, propagates a group of resources to specified clusters.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-client-side-apply':
 	Name of the manager used to track field ownership.
@@ -558,15 +584,17 @@ Options:
 	The files that contain the configurations to apply.
 
     --force=false:
-	If true, immediately remove resources from API and bypass graceful deletion. Note that immediate deletion of
-	some resources may result in inconsistency or data loss and requires confirmation.
+	If true, immediately remove resources from API and bypass graceful
+	deletion. Note that immediate deletion of some resources may result in
+	inconsistency or data loss and requires confirmation.
 
     --force-conflicts=false:
 	If true, server-side apply will force the changes against conflicts.
 
     --grace-period=-1:
-	Period of time in seconds given to the resource to terminate gracefully. Ignored if negative. Set to 1 for
-	immediate shutdown. Can only be set to 0 when --force is true (force deletion).
+	Period of time in seconds given to the resource to terminate
+	gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can
+	only be set to 0 when --force is true (force deletion).
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -575,67 +603,78 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process a kustomization directory. This flag can't be used together with -f or -R.
+	Process a kustomization directory. This flag can't be used together
+	with -f or -R.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     --openapi-patch=true:
-	If true, use openapi to calculate diff when the openapi presents and the resource can be found in the openapi
-	spec. Otherwise, fall back to use baked-in types.
+	If true, use openapi to calculate diff when the openapi presents and
+	the resource can be found in the openapi spec. Otherwise, fall back to
+	use baked-in types.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --overwrite=true:
-	Automatically resolve conflicts between the modified and live configuration by using values from the modified
-	configuration
+	Automatically resolve conflicts between the modified and live
+	configuration by using values from the modified configuration
 
     --prune=false:
-	Automatically delete resource objects, that do not appear in the configs and are created by either apply or
-	create --save-config. Should be used with either -l or --all.
+	Automatically delete resource objects, that do not appear in the
+	configs and are created by either apply or create --save-config.
+	Should be used with either -l or --all.
 
     --prune-allowlist=[]:
 	Overwrite the default allowlist with <group/version/kind> for --prune
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --server-side=false:
 	If true, apply runs in the server instead of the client.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --subresource='':
-	If specified, apply will operate on the subresource of the requested object.  Only allowed when using
-	--server-side.
+	If specified, apply will operate on the subresource of the requested
+	object.  Only allowed when using --server-side.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --timeout=0s:
-	The length of time to wait before giving up on a delete, zero means determine a timeout from the size of the
-	object
+	The length of time to wait before giving up on a delete, zero means
+	determine a timeout from the size of the object
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --wait=false:
-	If true, wait for resources to be gone before returning. This waits for finalizers.
+	If true, wait for resources to be gone before returning. This waits
+	for finalizers.
 
 Usage:
   karmadactl apply (-f FILENAME | -k DIRECTORY) [options]
@@ -669,12 +708,15 @@ Examples:
 
 Options:
     --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is members,
-	for example: --operation-scope=members --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
 
     -c, --container='':
-	Container name. If omitted, use the kubectl.kubernetes.io/default-container annotation for selecting the
-	container to be attached or the first container in the pod will be chosen
+	Container name. If omitted, use the
+	kubectl.kubernetes.io/default-container annotation for selecting the
+	container to be attached or the first container in the pod will be
+	chosen
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -686,11 +728,12 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
     --pod-running-timeout=1m0s:
-	The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
 
     -q, --quiet=false:
 	Only print output from the remote session
@@ -789,7 +832,7 @@ Available Commands:
   deployment            Create a deployment with the specified name
   ingress               Create an ingress with the specified name
   job                   Create a job with the specified name
-  namespace             用指定的名称创建一个命名空间
+  namespace             Create a namespace with the specified name
   poddisruptionbudget   Create a pod disruption budget with the specified name
   priorityclass         Create a priority class with the specified name
   quota                 Create a quota with the specified name
@@ -797,17 +840,19 @@ Available Commands:
   rolebinding           Create a role binding for a particular role or cluster role
   secret                Create a secret using a specified subcommand
   service               Create a service using a specified subcommand
-  serviceaccount        创建一个指定名称的服务账户
+  serviceaccount        Create a service account with the specified name
   token                 Request a service account token
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --edit=false:
 	Edit the API resource before creating
@@ -819,45 +864,57 @@ Options:
 	Filename, directory, or URL to files to use to create the resource
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --raw='':
-	Raw URI to POST to the server.  Uses the transport specified by the kubeconfig file.
+	Raw URI to POST to the server.  Uses the transport specified by the
+	kubeconfig file.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --windows-line-endings=false:
-	Only relevant if --edit=true. Defaults to the line ending native to your platform.
+	Only relevant if --edit=true. Defaults to the line ending native to
+	your platform.
 
 Usage:
   karmadactl create -f FILENAME [options]
@@ -899,12 +956,14 @@ Options:
 	An aggregation label selector for combining ClusterRoles.
 
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
@@ -913,32 +972,41 @@ Options:
 	A partial url that user should have access to.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --resource=[]:
 	Resource that the rule applies to
 
     --resource-name=[]:
-	Resource in the white list that the rule applies to, repeat this flag for multiple items
+	Resource in the white list that the rule applies to, repeat this flag
+	for multiple items
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --verb=[]:
@@ -960,50 +1028,63 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --clusterrole='':
-	ClusterRoleBinding 应该指定 ClusterRole
+	ClusterRole this ClusterRoleBinding should reference
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --group=[]:
-	Groups to bind to the clusterrole. The flag can be repeated to add multiple groups.
+	Groups to bind to the clusterrole. The flag can be repeated to add
+	multiple groups.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --serviceaccount=[]:
-	Service accounts to bind to the clusterrole, in the format <namespace>:<name>. The flag can be repeated to add
-	multiple service accounts.
+	Service accounts to bind to the clusterrole, in the format
+	<namespace>:<name>. The flag can be repeated to add multiple service
+	accounts.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --user=[]:
-	Usernames to bind to the clusterrole. The flag can be repeated to add multiple users.
+	Usernames to bind to the clusterrole. The flag can be repeated to add
+	multiple users.
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1043,51 +1124,65 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --append-hash=false:
 	Append a hash of the configmap to its name.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --from-env-file=[]:
-	Specify the path to a file to read lines of key=val pairs to create a configmap.
+	Specify the path to a file to read lines of key=val pairs to create a
+	configmap.
 
     --from-file=[]:
-	Key file can be specified using its file path, in which case file basename will be used as configmap key, or
-	optionally with a key and file path, in which case the given key will be used.  Specifying a directory will
-	iterate each named file in the directory whose basename is a valid configmap key.
+	Key file can be specified using its file path, in which case file
+	basename will be used as configmap key, or optionally with a key and
+	file path, in which case the given key will be used.  Specifying a
+	directory will iterate each named file in the directory whose basename
+	is a valid configmap key.
 
     --from-literal=[]:
-	Specify a key and literal value to insert in configmap (i.e. mykey=somevalue)
+	Specify a key and literal value to insert in configmap (i.e.
+	mykey=somevalue)
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1112,12 +1207,14 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
@@ -1126,32 +1223,40 @@ Options:
 	Image name to run.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --restart='':
 	job's restart policy. supported values: OnFailure, Never
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --schedule='':
 	A schedule in the Cron format the job should be run with.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1185,22 +1290,26 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --image=[]:
-	Image names to run. A deployment can have multiple images set for multi-container pod.
+	Image names to run. A deployment can have multiple images set for
+	multi-container pod.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --port=-1:
 	The containerPort that this deployment exposes.
@@ -1209,22 +1318,29 @@ Options:
 	Number of replicas to create. Default is 1.
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1279,11 +1395,13 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --annotation=[]:
-	Annotation to insert in the ingress object, in the format annotation=value
+	Annotation to insert in the ingress object, in the format
+	annotation=value
 
     --class='':
 	Ingress Class to be used
@@ -1292,37 +1410,47 @@ Options:
 	Default service for backend, in format of svcname:port
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --rule=[]:
-	Rule in format host/path=service:port[,tls=secretname]. Paths containing the leading character '*' are
-	considered pathType=Prefix. tls argument is optional.
+	Rule in format host/path=service:port[,tls=secretname]. Paths
+	containing the leading character '*' are considered pathType=Prefix.
+	tls argument is optional.
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1347,43 +1475,54 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --from='':
-	The name of the resource to create a Job from (only CronJob is supported).
+	The name of the resource to create a Job from (only CronJob is
+	supported).
 
     --image='':
 	Image name to run.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1394,48 +1533,58 @@ Use "karmadactl options" for a list of global command-line options (applies to a
 
 === karmadactl create namespace ===
 
-用给定名称创建一个命名空间。
+Create a namespace with the specified name.
 
 Aliases:
 namespace, ns
 
 Examples:
-  # 创建一个名为 my-namespace 的新命名空间
+  # Create a new namespace named my-namespace
   kubectl create namespace my-namespace
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1462,46 +1611,59 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --max-unavailable='':
-	The maximum number or percentage of unavailable pods this budget requires.
+	The maximum number or percentage of unavailable pods this budget
+	requires.
 
     --min-available='':
-	此预算要求的可用 Pod 的最小数量或百分比。
+	The minimum number or percentage of available pods this budget
+	requires.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --selector='':
-	一个用于该预算的标签选择器。只支持基于等值比较的选择器要求。
+	A label selector to use for this budget. Only equality-based selector
+	requirements are supported.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1529,47 +1691,59 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --description='':
-	description is an arbitrary string that usually provides guidelines on when this priority class should be
-	used.
+	description is an arbitrary string that usually provides guidelines on
+	when this priority class should be used.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --global-default=false:
-	global-default specifies whether this PriorityClass should be considered as the default priority.
+	global-default specifies whether this PriorityClass should be
+	considered as the default priority.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --preemption-policy='PreemptLowerPriority':
-	preemption-policy is the policy for preempting pods with lower priority.
+	preemption-policy is the policy for preempting pods with lower
+	priority.
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --value=0:
@@ -1597,43 +1771,55 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --hard='':
-	一组以逗号分隔的资源=数量对，用于定义硬性限制。
+	A comma-delimited set of resource=quantity pairs that define a hard
+	limit.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --scopes='':
-	一组以逗号分隔的配额范围，必须全部匹配配额所跟踪的每个对象。
+	A comma-delimited set of quota scopes that must all match each object
+	tracked by the quota.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1644,7 +1830,7 @@ Use "karmadactl options" for a list of global command-line options (applies to a
 
 === karmadactl create role ===
 
-创建一个具有单一规则的角色。
+Create a role with single rule.
 
 Examples:
   # Create a role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
@@ -1661,43 +1847,54 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --resource=[]:
 	Resource that the rule applies to
 
     --resource-name=[]:
-	Resource in the white list that the rule applies to, repeat this flag for multiple items
+	Resource in the white list that the rule applies to, repeat this flag
+	for multiple items
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --verb=[]:
@@ -1722,53 +1919,66 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --clusterrole='':
-	RoleBinding 应该指定 ClusterRole
+	ClusterRole this RoleBinding should reference
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --group=[]:
-	Groups to bind to the role. The flag can be repeated to add multiple groups.
+	Groups to bind to the role. The flag can be repeated to add multiple
+	groups.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --role='':
-	RoleBinding 应该引用的 Role
+	Role this RoleBinding should reference
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --serviceaccount=[]:
-	Service accounts to bind to the role, in the format <namespace>:<name>. The flag can be repeated to add
-	multiple service accounts.
+	Service accounts to bind to the role, in the format
+	<namespace>:<name>. The flag can be repeated to add multiple service
+	accounts.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --user=[]:
-	Usernames to bind to the role. The flag can be repeated to add multiple users.
+	Usernames to bind to the role. The flag can be repeated to add
+	multiple users.
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1788,9 +1998,9 @@ Create a secret with specified type.
  A tls type secret holds TLS certificate and its associated key.
 
 Available Commands:
-  docker-registry   创建一个给 Docker registry 使用的 Secret
+  docker-registry   Create a secret for use with a Docker registry
   generic           Create a secret from a local file, directory, or literal value
-  tls               创建一个 TLS secret
+  tls               Create a TLS secret
 
 Usage:
   karmadactl create secret (docker-registry | generic | tls) [options]
@@ -1823,58 +2033,70 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --append-hash=false:
 	Append a hash of the secret to its name.
 
     --docker-email='':
-	用于 Docker 镜像库的邮件地址
+	Email for Docker registry
 
     --docker-password='':
-	用于 Docker 镜像库身份验证的密码
+	Password for Docker registry authentication
 
     --docker-server='https://index.docker.io/v1/':
-	Docker 镜像库的服务器位置
+	Server location for Docker registry
 
     --docker-username='':
-	用于 Docker 镜像库身份验证的用户名
+	Username for Docker registry authentication
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --from-file=[]:
-	Key files can be specified using their file path, in which case a default name of .dockerconfigjson will be
-	given to them, or optionally with a name and file path, in which case the given name will be used. Specifying
-	a directory will iterate each named file in the directory that is a valid secret key. For this command, the
-	key should always be .dockerconfigjson.
+	Key files can be specified using their file path, in which case a
+	default name of .dockerconfigjson will be given to them, or optionally
+	with a name and file path, in which case the given name will be used.
+	Specifying a directory will iterate each named file in the directory
+	that is a valid secret key. For this command, the key should always be
+	.dockerconfigjson.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1911,54 +2133,68 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --append-hash=false:
 	Append a hash of the secret to its name.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --from-env-file=[]:
-	Specify the path to a file to read lines of key=val pairs to create a secret.
+	Specify the path to a file to read lines of key=val pairs to create a
+	secret.
 
     --from-file=[]:
-	Key files can be specified using their file path, in which case a default name will be given to them, or
-	optionally with a name and file path, in which case the given name will be used.  Specifying a directory will
-	iterate each named file in the directory that is a valid secret key.
+	Key files can be specified using their file path, in which case a
+	default name will be given to them, or optionally with a name and file
+	path, in which case the given name will be used.  Specifying a
+	directory will iterate each named file in the directory that is a
+	valid secret key.
 
     --from-literal=[]:
-	Specify a key and literal value to insert in secret (i.e. mykey=somevalue)
+	Specify a key and literal value to insert in secret (i.e.
+	mykey=somevalue)
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --type='':
-	要创建的 Secret 类型
+	The type of secret to create
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -1979,46 +2215,56 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --append-hash=false:
 	Append a hash of the secret to its name.
 
     --cert='':
-	PEM 编码的公钥证书的路径。
+	Path to PEM encoded public key certificate.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     --key='':
-	与给定证书关联的私钥的路径。
+	Path to private key associated with given certificate.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2060,43 +2306,54 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --clusterip='':
-	为“无头”服务（无负载平衡）分配你自己的 ClusterIP 或设置为“无。
+	Assign your own ClusterIP or set to 'None' for a 'headless' service
+	(no loadbalancing).
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --tcp=[]:
 	Port pairs can be specified as '<port>:<targetPort>'.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2107,9 +2364,9 @@ Use "karmadactl options" for a list of global command-line options (applies to a
 
 === karmadactl create service externalname ===
 
-创建具有指定名称的 ExternalName 服务。
+Create an ExternalName service with the specified name.
 
- ExternalName 服务引用外部 DNS 地址而不是 Pod 地址， 这将允许应用程序作者引用存在于平台外、其他集群上或本地的服务。
+ ExternalName service references to an external DNS address instead of only pods, which will allow application authors to reference services that exist off platform, on other clusters, or locally.
 
 Examples:
   # Create a new ExternalName service named my-ns
@@ -2117,12 +2374,14 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --external-name='':
 	External name of service
@@ -2131,29 +2390,37 @@ Options:
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --tcp=[]:
 	Port pairs can be specified as '<port>:<targetPort>'.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2164,48 +2431,58 @@ Use "karmadactl options" for a list of global command-line options (applies to a
 
 === karmadactl create service loadbalancer ===
 
-使用一个指定的名称创建一个 LoadBalancer 服务。
+Create a LoadBalancer service with the specified name.
 
 Examples:
-  # 创建一个名称为 my-lbs 的新负载均衡服务
+  # Create a new LoadBalancer service named my-lbs
   kubectl create service loadbalancer my-lbs --tcp=5678:8080
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --tcp=[]:
 	Port pairs can be specified as '<port>:<targetPort>'.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2224,12 +2501,14 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
@@ -2238,29 +2517,37 @@ Options:
 	Port used to expose the service on each node in a cluster.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --tcp=[]:
 	Port pairs can be specified as '<port>:<targetPort>'.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2271,48 +2558,58 @@ Use "karmadactl options" for a list of global command-line options (applies to a
 
 === karmadactl create serviceaccount ===
 
-用指定的名称创建一个服务账户。
+Create a service account with the specified name.
 
 Aliases:
 serviceaccount, sa
 
 Examples:
-  # 创建一个名为 my-service-account 的新服务帐户
+  # Create a new service account named my-service-account
   kubectl create serviceaccount my-service-account
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-create':
 	Name of the manager used to track field ownership.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
 Usage:
@@ -2346,39 +2643,46 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --audience=[]:
-	Audience of the requested token. If unset, defaults to requesting a token for use with the Kubernetes API
-	server. May be repeated to request a token valid for multiple audiences.
+	Audience of the requested token. If unset, defaults to requesting a
+	token for use with the Kubernetes API server. May be repeated to
+	request a token valid for multiple audiences.
 
     --bound-object-kind='':
-	Kind of an object to bind the token to. Supported kinds are Node, Pod, Secret. If set, --bound-object-name
-	must be provided.
+	Kind of an object to bind the token to. Supported kinds are Node, Pod,
+	Secret. If set, --bound-object-name must be provided.
 
     --bound-object-name='':
-	Name of an object to bind the token to. The token will expire when the object is deleted. Requires
-	--bound-object-kind.
+	Name of an object to bind the token to. The token will expire when the
+	object is deleted. Requires --bound-object-kind.
 
     --bound-object-uid='':
-	UID of an object to bind the token to. Requires --bound-object-kind and --bound-object-name. If unset, the UID
-	of the existing object is used.
+	UID of an object to bind the token to. Requires --bound-object-kind
+	and --bound-object-name. If unset, the UID of the existing object is
+	used.
 
     --duration=0s:
-	Requested lifetime of the issued token. If not set or if set to 0, the lifetime will be determined by the
-	server automatically. The server may return a token with a longer or shorter lifetime.
+	Requested lifetime of the issued token. If not set or if set to 0, the
+	lifetime will be determined by the server automatically. The server
+	may return a token with a longer or shorter lifetime.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
 Usage:
   karmadactl create token SERVICE_ACCOUNT_NAME [options]
@@ -2411,7 +2715,8 @@ Options:
 	namespace where Karmada components are installed.
 
     --purge-namespace=false:
-	Run the command with purge-namespace, the namespace which Karmada components were installed will be deleted.
+	Run the command with purge-namespace, the namespace which Karmada
+	components were installed will be deleted.
 
 Usage:
   karmadactl deinit [options]
@@ -2463,37 +2768,45 @@ Examples:
 
 Options:
     --all=false:
-	Delete all resources, in the namespace of the specified resource types.
+	Delete all resources, in the namespace of the specified resource
+	types.
 
     -A, --all-namespaces=false:
-	If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even
-	if specified with --namespace.
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
 
     --cascade='background':
-	Must be "background", "orphan", or "foreground". Selects the deletion cascading strategy for the dependents
-	(e.g. Pods created by a ReplicationController). Defaults to background.
+	Must be "background", "orphan", or "foreground". Selects the deletion
+	cascading strategy for the dependents (e.g. Pods created by a
+	ReplicationController). Defaults to background.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-selector='':
-	Selector (field query) to filter on, supports '=', '==', and '!='.(e.g. --field-selector
-	key1=value1,key2=value2). The server only supports a limited number of field queries per type.
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
 
     -f, --filename=[]:
 	containing the resource to delete.
 
     --force=false:
-	If true, immediately remove resources from API and bypass graceful deletion. Note that immediate deletion of
-	some resources may result in inconsistency or data loss and requires confirmation.
+	If true, immediately remove resources from API and bypass graceful
+	deletion. Note that immediate deletion of some resources may result in
+	inconsistency or data loss and requires confirmation.
 
     --grace-period=-1:
-	Period of time in seconds given to the resource to terminate gracefully. Ignored if negative. Set to 1 for
-	immediate shutdown. Can only be set to 0 when --force is true (force deletion).
+	Period of time in seconds given to the resource to terminate
+	gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can
+	only be set to 0 when --force is true (force deletion).
 
     --ignore-not-found=false:
-	Treat "resource not found" as a successful delete. Defaults to "true" when --all is specified.
+	Treat "resource not found" as a successful delete. Defaults to "true"
+	when --all is specified.
 
     -i, --interactive=false:
 	If true, delete resource only when user confirms.
@@ -2505,35 +2818,40 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process a kustomization directory. This flag can't be used together with -f or -R.
+	Process a kustomization directory. This flag can't be used together
+	with -f or -R.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     --now=false:
-	If true, resources are signaled for immediate shutdown (same as --grace-period=1).
+	If true, resources are signaled for immediate shutdown (same as
+	--grace-period=1).
 
     -o, --output='':
 	Output mode. Use "-o name" for shorter output (resource/name).
 
     --raw='':
-	Raw URI to DELETE to the server.  Uses the transport specified by the kubeconfig file.
+	Raw URI to DELETE to the server.  Uses the transport specified by the
+	kubeconfig file.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --timeout=0s:
-	The length of time to wait before giving up on a delete, zero means determine a timeout from the size of the
-	object
+	The length of time to wait before giving up on a delete, zero means
+	determine a timeout from the size of the object
 
     --wait=true:
-	If true, wait for resources to be gone before returning. This waits for finalizers.
+	If true, wait for resources to be gone before returning. This waits
+	for finalizers.
 
 Usage:
   karmadactl delete ([-f FILENAME] | [-k DIRECTORY] | TYPE [(NAME | -l label | --all)]) [options]
@@ -2573,18 +2891,22 @@ Examples:
 
 Options:
     -A, --all-namespaces=false:
-	If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even
-	if specified with --namespace.
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
 
     --chunk-size=500:
-	Return large lists in chunks rather than all at once. Pass 0 to disable.
+	Return large lists in chunks rather than all at once. Pass 0 to
+	disable.
 
     -C, --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is members,
-	for example: --operation-scope=members --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
 
     -f, --filename=[]:
-	Filename, directory, or URL to files containing the resource to describe
+	Filename, directory, or URL to files containing the resource to
+	describe
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -2593,23 +2915,25 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --show-events=true:
 	If true, display events related to the described object.
@@ -2654,8 +2978,9 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --field-manager='kubectl-edit':
 	Name of the manager used to track field ownership.
@@ -2670,42 +2995,53 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --output-patch=false:
 	Output the patch if the resource is edited.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --save-config=false:
-	If true, the configuration of current object will be saved in its annotation. Otherwise, the annotation will
-	be unchanged. This flag is useful when you want to perform kubectl apply on this object in the future.
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --subresource='':
-	If specified, edit will operate on the subresource of the requested object.
+	If specified, edit will operate on the subresource of the requested
+	object.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --validate='strict':
-	Must be one of: strict (or true), warn, ignore (or false). "true" or "strict" will use a schema to validate
-	the input and fail the request if invalid. It will perform server side validation if ServerSideFieldValidation
-	is enabled on the api-server, but will fall back to less reliable client-side validation if not. "warn" will
-	warn about unknown or duplicate fields without blocking the request if server-side field validation is enabled
-	on the API server, and behave as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
 	validation, silently dropping any unknown or duplicate fields.
 
     --windows-line-endings=false:
@@ -2751,12 +3087,15 @@ Examples:
 
 Options:
     --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is members,
-	for example: --operation-scope=members --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
 
     -c, --container='':
-	Container name. If omitted, use the kubectl.kubernetes.io/default-container annotation for selecting the
-	container to be attached or the first container in the pod will be chosen
+	Container name. If omitted, use the
+	kubectl.kubernetes.io/default-container annotation for selecting the
+	container to be attached or the first container in the pod will be
+	chosen
 
     -f, --filename=[]:
 	to use to exec into the resource
@@ -2771,11 +3110,12 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
     --pod-running-timeout=1m0s:
-	The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
 
     -q, --quiet=false:
 	Only print output from the remote session
@@ -2820,11 +3160,13 @@ Examples:
 
 Options:
     --api-version='':
-	Get different explanations for particular API version (API group/version)
+	Get different explanations for particular API version (API
+	group/version)
 
     --cluster='':
-	Used to specify a target member cluster and only takes effect when the command's operation scope is member
-	clusters, for example: --operation-scope=all --cluster=member1
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is member clusters, for example:
+	--operation-scope=all --cluster=member1
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -2836,8 +3178,8 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada and members. Defaults to
-	karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
 
     -o, --output='plaintext':
 	Format in which to render the schema (plaintext, plaintext-openapiv2)
@@ -2889,19 +3231,23 @@ Examples:
 
 Options:
     -A, --all-namespaces=false:
-	If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even
-	if specified with --namespace.
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
 
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     -C, --clusters=[]:
-	Used to specify target member clusters and only takes effect when the command's operation scope is members or
-	all, for example: --operation-scope=all --clusters=member1,member2
+	Used to specify target member clusters and only takes effect when the
+	command's operation scope is members or all, for example:
+	--operation-scope=all --clusters=member1,member2
 
     --ignore-not-found=false:
-	If the requested object does not exist the command will return exit code 0.
+	If the requested object does not exist the command will return exit
+	code 0.
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -2910,8 +3256,9 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -L, --label-columns=[]:
-	Accepts a comma separated list of labels that are going to be presented as columns. Names are case-sensitive.
-	You can also use multiple flag options like -L label1 -L label2...
+	Accepts a comma separated list of labels that are going to be
+	presented as columns. Names are case-sensitive. You can also use
+	multiple flag options like -L label1 -L label2...
 
     -l, --labels='':
 	-l=label or -l label
@@ -2920,50 +3267,70 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     --no-headers=false:
-	When using the default or custom-column output format, don't print headers (default print headers).
+	When using the default or custom-column output format, don't print
+	headers (default print headers).
 
     -s, --operation-scope=karmada:
-	Used to control the operation scope of the command. The optional values are karmada, members, and all.
-	Defaults to karmada.
+	Used to control the operation scope of the command. The optional
+	values are karmada, members, and all. Defaults to karmada.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file, custom-columns, custom-columns-file, wide). See custom columns
-	[https://kubernetes.io/docs/reference/kubectl/#custom-columns], golang template
-	[http://golang.org/pkg/text/template/#pkg-overview] and jsonpath template
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file, custom-columns, custom-columns-file, wide). See custom
+	columns
+	[https://kubernetes.io/docs/reference/kubectl/#custom-columns], golang
+	template [http://golang.org/pkg/text/template/#pkg-overview] and
+	jsonpath template
 	[https://kubernetes.io/docs/reference/kubectl/jsonpath/].
 
     --output-watch-events=false:
-	Output watch event objects when --watch or --watch-only is used. Existing objects are output as initial ADDED
-	events.
+	Output watch event objects when --watch or --watch-only is used.
+	Existing objects are output as initial ADDED events.
 
     --show-kind=false:
 	If present, list the resource type for the requested object(s).
 
     --show-labels=false:
-	When printing, show all labels as the last column (default hide labels column)
+	When printing, show all labels as the last column (default hide labels
+	column)
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --sort-by='':
-	If non-empty, sort list types using this field specification.  The field specification is expressed as a
-	JSONPath expression (e.g. '{.metadata.name}'). The field in the API resource specified by this JSONPath
-	expression must be an integer or a string.
+	If non-empty, sort list types using this field specification.  The
+	field specification is expressed as a JSONPath expression (e.g.
+	'{.metadata.name}'). The field in the API resource specified by this
+	JSONPath expression must be an integer or a string.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     -w, --watch=false:
-	After listing/getting the requested object, watch for changes. Uninitialized objects are excluded if no object
-	name is provided.
+	After listing/getting the requested object, watch for changes.
+	Uninitialized objects are excluded if no object name is provided.
 
     --watch-only=false:
-	Watch for changes to the requested object(s), without listing/getting first.
+	Watch for changes to the requested object(s), without listing/getting
+	first.
 
 Usage:
   karmadactl get [NAME | -l label | -n namespace] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl help ===
+
+Help provides help for any command in the application.
+Simply type karmadactl help [path to command] for full details.
+
+Usage:
+  karmadactl help [command] [flags] [options]
 
 Use "karmadactl options" for a list of global command-line options (applies to all commands).
 
@@ -3052,12 +3419,16 @@ Examples:
 
 Options:
     --ca-cert-file='':
-	The root CA certificate file which will be used to issue new certificates for Karmada components. If not set,
-	a new self-signed root CA certificate will be generated. This must be used together with --ca-key-file.
+	The root CA certificate file which will be used to issue new
+	certificates for Karmada components. If not set, a new self-signed
+	root CA certificate will be generated. This must be used together with
+	--ca-key-file.
 
     --ca-key-file='':
-	The root CA private key file which will be used to issue new certificates for Karmada components. If not set,
-	a new self-signed root CA key will be generated. This must be used together with --ca-cert-file.
+	The root CA private key file which will be used to issue new
+	certificates for Karmada components. If not set, a new self-signed
+	root CA key will be generated. This must be used together with
+	--ca-cert-file.
 
     --cert-external-dns='':
 	the external DNS of Karmada certificate (e.g localhost,localhost.com)
@@ -3066,7 +3437,8 @@ Options:
 	the external IP of Karmada certificate (e.g 192.168.1.2,172.16.1.2)
 
     --cert-validity-period=8760h0m0s:
-	the validity period of Karmada certificate (e.g 8760h0m0s, that is 365 days)
+	the validity period of Karmada certificate (e.g 8760h0m0s, that is 365
+	days)
 
     --config='':
 	Karmada init file path
@@ -3081,15 +3453,18 @@ Options:
 	etcd data path,valid in hostPath mode.
 
     --etcd-extra-args=[]:
-	Additional command line arguments to pass to the etcd component. Can be specified multiple times or as
-	comma-separated values (e.g., '--snapshot-count=5000,--heartbeat-interval=100')
+	Additional command line arguments to pass to the etcd component. Can
+	be specified multiple times or as comma-separated values (e.g.,
+	'--snapshot-count=5000,--heartbeat-interval=100')
 
     --etcd-image='':
 	etcd image
 
     --etcd-node-selector-labels='':
-	the labels used for etcd pod to select nodes, valid in hostPath mode, and with each label separated by a
-	comma. ( e.g. --etcd-node-selector-labels karmada.io/etcd=true,kubernetes.io/os=linux)
+	the labels used for etcd pod to select nodes, valid in hostPath mode,
+	and with each label separated by a comma. ( e.g.
+	--etcd-node-selector-labels
+	karmada.io/etcd=true,kubernetes.io/os=linux)
 
     --etcd-priority-class='system-node-critical':
 	The priority class name for the component etcd.
@@ -3101,55 +3476,65 @@ Options:
 	etcd replica set, cluster 3,5...singular
 
     --etcd-storage-mode='hostPath':
-	etcd data storage mode(emptyDir,hostPath,PVC). value is PVC, specify --storage-classes-name
+	etcd data storage mode(emptyDir,hostPath,PVC). value is PVC, specify
+	--storage-classes-name
 
     --external-etcd-ca-cert-path='':
 	The path of CA certificate of the external etcd cluster in pem format.
 
     --external-etcd-client-cert-path='':
-	The path of client side certificate to the external etcd cluster in pem format.
+	The path of client side certificate to the external etcd cluster in
+	pem format.
 
     --external-etcd-client-key-path='':
-	The path of client side private key to the external etcd cluster in pem format.
+	The path of client side private key to the external etcd cluster in
+	pem format.
 
     --external-etcd-key-prefix='':
-	The key prefix to be configured to kube-apiserver through --etcd-prefix.
+	The key prefix to be configured to kube-apiserver through
+	--etcd-prefix.
 
     --external-etcd-servers='':
-	The server urls of external etcd cluster, to be used by kube-apiserver through --etcd-servers.
+	The server urls of external etcd cluster, to be used by kube-apiserver
+	through --etcd-servers.
 
     --host-cluster-domain='cluster.local':
-	The cluster domain of karmada host cluster. (e.g. --host-cluster-domain=host.karmada)
+	The cluster domain of karmada host cluster. (e.g.
+	--host-cluster-domain=host.karmada)
 
     --image-pull-policy='IfNotPresent':
-	The image pull policy for all Karmada components container. One of Always, Never, IfNotPresent. Defaults to
-	IfNotPresent.
+	The image pull policy for all Karmada components container. One of
+	Always, Never, IfNotPresent. Defaults to IfNotPresent.
 
     --image-pull-secrets=[]:
-	Image pull secrets are used to pull images from the private registry, could be secret list separated by comma
-	(e.g '--image-pull-secrets PullSecret1,PullSecret2', the secrets should be pre-settled in the namespace
-	declared by '--namespace')
+	Image pull secrets are used to pull images from the private registry,
+	could be secret list separated by comma (e.g '--image-pull-secrets
+	PullSecret1,PullSecret2', the secrets should be pre-settled in the
+	namespace declared by '--namespace')
 
     --karmada-aggregated-apiserver-extra-args=[]:
-	Additional command line arguments to pass to the karmada-aggregated-apiserver component. Can be specified
-	multiple times or as comma-separated values (e.g., '--v=4,--enable-pprof')
+	Additional command line arguments to pass to the
+	karmada-aggregated-apiserver component. Can be specified multiple
+	times or as comma-separated values (e.g., '--v=4,--enable-pprof')
 
     --karmada-aggregated-apiserver-image='docker.io/karmada/karmada-aggregated-apiserver:v0.0.0-master':
 	Karmada aggregated apiserver image
 
     --karmada-aggregated-apiserver-priority-class='system-node-critical':
-	The priority class name for the component karmada-aggregated-apiserver.
+	The priority class name for the component
+	karmada-aggregated-apiserver.
 
     --karmada-aggregated-apiserver-replicas=1:
 	Karmada aggregated apiserver replica set
 
     --karmada-apiserver-advertise-address='':
-	The IP address the Karmada API Server will advertise it's listening on. If not set, the address on the master
-	node will be used.
+	The IP address the Karmada API Server will advertise it's listening
+	on. If not set, the address on the master node will be used.
 
     --karmada-apiserver-extra-args=[]:
-	Additional command line arguments to pass to the karmada-apiserver component. Can be specified multiple times
-	or as comma-separated values (e.g., '--tls-min-version=VersionTLS12,--audit-log-path=-')
+	Additional command line arguments to pass to the karmada-apiserver
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--tls-min-version=VersionTLS12,--audit-log-path=-')
 
     --karmada-apiserver-image='':
 	Kubernetes apiserver image
@@ -3161,8 +3546,9 @@ Options:
 	Karmada apiserver replica set
 
     --karmada-controller-manager-extra-args=[]:
-	Additional command line arguments to pass to the karmada-controller-manager component. Can be specified
-	multiple times or as comma-separated values (e.g., '--v=2,--enable-pprof')
+	Additional command line arguments to pass to the
+	karmada-controller-manager component. Can be specified multiple times
+	or as comma-separated values (e.g., '--v=2,--enable-pprof')
 
     --karmada-controller-manager-image='docker.io/karmada/karmada-controller-manager:v0.0.0-master':
 	Karmada controller manager image
@@ -3177,14 +3563,17 @@ Options:
 	Karmada data path. kubeconfig cert and crds files
 
     --karmada-kube-controller-manager-extra-args=[]:
-	Additional command line arguments to pass to the karmada-kube-controller-manager component. Can be specified
-	multiple times or as comma-separated values (e.g., '--node-monitor-grace-period=50s,--node-monitor-period=5s')
+	Additional command line arguments to pass to the
+	karmada-kube-controller-manager component. Can be specified multiple
+	times or as comma-separated values (e.g.,
+	'--node-monitor-grace-period=50s,--node-monitor-period=5s')
 
     --karmada-kube-controller-manager-image='':
 	Kubernetes controller manager image
 
     --karmada-kube-controller-manager-priority-class='system-node-critical':
-	The priority class name for the component karmada-kube-controller-manager.
+	The priority class name for the component
+	karmada-kube-controller-manager.
 
     --karmada-kube-controller-manager-replicas=1:
 	Karmada kube controller manager replica set
@@ -3193,8 +3582,9 @@ Options:
 	Karmada pki path. Karmada cert files
 
     --karmada-scheduler-extra-args=[]:
-	Additional command line arguments to pass to the karmada-scheduler component. Can be specified multiple times
-	or as comma-separated values (e.g., '--scheduler-name=test-scheduler,--enable-pprof')
+	Additional command line arguments to pass to the karmada-scheduler
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--scheduler-name=test-scheduler,--enable-pprof')
 
     --karmada-scheduler-image='docker.io/karmada/karmada-scheduler:v0.0.0-master':
 	Karmada scheduler image
@@ -3206,8 +3596,9 @@ Options:
 	Karmada scheduler replica set
 
     --karmada-webhook-extra-args=[]:
-	Additional command line arguments to pass to the karmada-webhook component. Can be specified multiple times or
-	as comma-separated values (e.g., '--v=2,--enable-pprof')
+	Additional command line arguments to pass to the karmada-webhook
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--v=2,--enable-pprof')
 
     --karmada-webhook-image='docker.io/karmada/karmada-webhook:v0.0.0-master':
 	Karmada webhook image
@@ -3219,11 +3610,14 @@ Options:
 	Karmada webhook replica set
 
     --kube-image-mirror-country='':
-	Country code of the kube image registry to be used. For Chinese mainland users, set it to cn
+	Country code of the kube image registry to be used. For Chinese
+	mainland users, set it to cn
 
     --kube-image-registry='':
-	Kube image registry. For Chinese mainland users, you may use local gcr.io mirrors such as
-	registry.cn-hangzhou.aliyuncs.com/google_containers to override default kube image registry
+	Kube image registry. For Chinese mainland users, you may use local
+	gcr.io mirrors such as
+	registry.cn-hangzhou.aliyuncs.com/google_containers to override
+	default kube image registry
 
     --kube-image-tag='v1.35.2':
 	Choose a specific Kubernetes version for the control plane.
@@ -3238,9 +3632,10 @@ Options:
 	Karmada apiserver service node port
 
     --private-image-registry='':
-	Private image registry where pull images from. If set, all required images will be downloaded from it, it
-	would be useful in offline installation scenarios.  In addition, you still can use --kube-image-registry to
-	specify the registry for Kubernetes's images.
+	Private image registry where pull images from. If set, all required
+	images will be downloaded from it, it would be useful in offline
+	installation scenarios.  In addition, you still can use
+	--kube-image-registry to specify the registry for Kubernetes's images.
 
     --storage-classes-name='':
 	Kubernetes StorageClasses Name
@@ -3298,14 +3693,16 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --check=false:
 	Validates the given ResourceInterpreterCustomization configuration(s)
 
     --desired-file='':
-	Filename, directory, or URL to files identifying the resource to use as desiredObj argument in rule script.
+	Filename, directory, or URL to files identifying the resource to use
+	as desiredObj argument in rule script.
 
     --desired-replica=0:
 	The desiredReplica argument in rule script.
@@ -3314,8 +3711,8 @@ Options:
 	Edit customizations
 
     -f, --filename=[]:
-	Filename, directory, or URL to files containing the customizations. Files need to be in either YAML or JSON
-	format.
+	Filename, directory, or URL to files containing the customizations.
+	Files need to be in either YAML or JSON format.
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -3324,32 +3721,38 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     --observed-file='':
-	Filename, directory, or URL to files identifying the resource to use as observedObj argument in rule script.
+	Filename, directory, or URL to files identifying the resource to use
+	as observedObj argument in rule script.
 
     --operation='':
 	The interpret operation to use. One of:
 	(Retain,InterpretReplica,InterpretComponent,ReviseReplica,InterpretStatus,AggregateStatus,InterpretHealth,InterpretDependency)
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --show-doc=false:
 	Show document of rules when editing
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --status-file='':
-	Filename, directory, or URL to files identifying the resource to use as statusItems argument in rule script.
+	Filename, directory, or URL to files identifying the resource to use
+	as statusItems argument in rule script.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
 Usage:
   karmadactl interpret (-f FILENAME) (--operation OPERATION) [--ARGS VALUE]...  [options]
@@ -3372,36 +3775,40 @@ Examples:
 
 Options:
     --cluster-context='':
-	Name of cluster context in kubeconfig. The current context is used by default.
+	Name of cluster context in kubeconfig. The current context is used by
+	default.
 
     --cluster-kubeconfig='':
 	Path of the cluster's kubeconfig.
 
     --cluster-namespace='karmada-cluster':
-	Namespace in the control plane where member cluster secrets are stored.
+	Namespace in the control plane where member cluster secrets are
+	stored.
 
     --cluster-provider='':
-	Provider of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	providers for higher availability.
+	Provider of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across providers for higher
+	availability.
 
     --cluster-region='':
-	The region of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	regions for higher availability.
+	The region of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across regions for higher
+	availability.
 
     --cluster-zones=[]:
-	The zones of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	zones for higher availability.
+	The zones of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across zones for higher availability.
 
     --dry-run=false:
 	Run the command in dry-run mode, without making any server requests.
 
     --karmada-as='':
-	Username to impersonate for the operation in karmada control plane. User could be a regular user or a service
-	account in a namespace.
+	Username to impersonate for the operation in karmada control plane.
+	User could be a regular user or a service account in a namespace.
 
     --karmada-as-group=[]:
-	Group to impersonate for the operation in karmada control plane, this flag can be repeated to specify multiple
-	groups.
+	Group to impersonate for the operation in karmada control plane, this
+	flag can be repeated to specify multiple groups.
 
     --karmada-as-uid='':
 	UID to impersonate for the operation in karmada control plane.
@@ -3455,22 +3862,26 @@ Options:
 	If true, check the specified action in all namespaces.
 
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-label':
 	Name of the manager used to track field ownership.
 
     --field-selector='':
-	Selector (field query) to filter on, supports '=', '==', and '!='.(e.g. --field-selector
-	key1=value1,key2=value2). The server only supports a limited number of field queries per type.
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
 
     -f, --filename=[]:
-	Filename, directory, or URL to files identifying the resource to update the labels
+	Filename, directory, or URL to files identifying the resource to
+	update the labels
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -3479,7 +3890,8 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     --list=false:
 	If true, display the labels for a given resource.
@@ -3491,30 +3903,37 @@ Options:
 	If present, the namespace scope for this CLI request.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     --overwrite=false:
-	If true, allow labels to be overwritten, otherwise reject label updates that overwrite existing labels.
+	If true, allow labels to be overwritten, otherwise reject label
+	updates that overwrite existing labels.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --resource-version='':
-	如果非空，则标签更新只有在所给值是对象的当前资源版本时才会成功。仅在指定单个资源时有效。
+	If non-empty, the labels update will only succeed if this is the
+	current resource-version for the object. Only valid when specifying a
+	single resource.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
 Usage:
   karmadactl label [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
@@ -3573,11 +3992,14 @@ Options:
 	Specify if the logs should be streamed.
 
     --ignore-errors=false:
-	If watching / following pod logs, allow for any errors that occur to be non-fatal
+	If watching / following pod logs, allow for any errors that occur to
+	be non-fatal
 
     --insecure-skip-tls-verify-backend=false:
-	Skip verifying the identity of the kubelet that logs are requested from.  In theory, an attacker could provide
-	invalid log content back. You might want to use this if your kubelet serving certificates have expired.
+	Skip verifying the identity of the kubelet that logs are requested
+	from.  In theory, an attacker could provide invalid log content back.
+	You might want to use this if your kubelet serving certificates have
+	expired.
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -3589,35 +4011,39 @@ Options:
 	Maximum bytes of logs to return. Defaults to no limit.
 
     --max-log-requests=5:
-	Specify maximum number of concurrent logs to follow when using by a selector. Defaults to 5.
+	Specify maximum number of concurrent logs to follow when using by a
+	selector. Defaults to 5.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     --pod-running-timeout=20s:
-	The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
 
     --prefix=false:
 	Prefix each log line with the log source (pod name and container name)
 
     -p, --previous=false:
-	If true, print the logs for the previous instance of the container in a pod if it exists.
+	If true, print the logs for the previous instance of the container in
+	a pod if it exists.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --since=0s:
-	Only return logs newer than a relative duration like 5s, 2m, or 3h. Defaults to all logs. Only one of
-	since-time / since may be used.
+	Only return logs newer than a relative duration like 5s, 2m, or 3h.
+	Defaults to all logs. Only one of since-time / since may be used.
 
     --since-time='':
-	仅返回在指定日期 (RFC3339) 之后的日志。默认为所有日志。只能使用 since-time / since 之一。
+	Only return logs after a specific date (RFC3339). Defaults to all
+	logs. Only one of since-time / since may be used.
 
     --tail=-1:
-	Lines of recent log file to display. Defaults to -1 with no selector, showing all log lines otherwise 10, if a
-	selector is provided.
+	Lines of recent log file to display. Defaults to -1 with no selector,
+	showing all log lines otherwise 10, if a selector is provided.
 
     --timestamps=false:
 	Include timestamps on each line in the log output
@@ -3658,18 +4084,21 @@ Examples:
 
 Options:
     --allow-missing-template-keys=true:
-	If true, ignore any errors in templates when a field or map key is missing in the template. Only applies to
-	golang and jsonpath output formats.
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
 
     --dry-run='none':
-	Must be "none", "server", or "client". If client strategy, only print the object that would be sent, without
-	sending it. If server strategy, submit server-side request without persisting the resource.
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
 
     --field-manager='kubectl-patch':
 	Name of the manager used to track field ownership.
 
     -f, --filename=[]:
-	Filename, directory, or URL to files identifying the resource to update
+	Filename, directory, or URL to files identifying the resource to
+	update
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -3678,17 +4107,20 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     -k, --kustomize='':
-	Process the kustomization directory. This flag can't be used together with -f or -R.
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
 
     --local=false:
-	If true, patch will operate on the content of the file, not the server-side resource.
+	If true, patch will operate on the content of the file, not the
+	server-side resource.
 
     -n, --namespace='':
 	If present, the namespace scope for this CLI request.
 
     -o, --output='':
-	Output format. One of: (json, yaml, kyaml, name, go-template, go-template-file, template, templatefile,
-	jsonpath, jsonpath-as-json, jsonpath-file).
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
 
     -p, --patch='':
 	The patch to be applied to the resource JSON file.
@@ -3697,18 +4129,22 @@ Options:
 	A file containing a patch to be applied to the resource.
 
     -R, --recursive=false:
-	Process the directory used in -f, --filename recursively. Useful when you want to manage related manifests
-	organized within the same directory.
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
 
     --show-managed-fields=false:
-	If true, keep the managedFields when printing objects in JSON or YAML format.
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
 
     --subresource='':
-	If specified, patch will operate on the subresource of the requested object.
+	If specified, patch will operate on the subresource of the requested
+	object.
 
     --template='':
-	Template string or path to template file to use when -o=go-template, -o=go-template-file. The template format
-	is golang templates [http://golang.org/pkg/text/template/#pkg-overview].
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
 
     --type='strategic':
 	The type of patch being provided; one of [json merge strategic]
@@ -3754,14 +4190,16 @@ Examples:
 
 Options:
     --auto-create-policy=true:
-	Automatically create a PropagationPolicy for namespace-scoped resources or create a ClusterPropagationPolicy
-	for cluster-scoped resources.
+	Automatically create a PropagationPolicy for namespace-scoped
+	resources or create a ClusterPropagationPolicy for cluster-scoped
+	resources.
 
     -C, --cluster='':
 	the name of legacy cluster (eg -C=member1)
 
     --cluster-context='':
-	Context name of legacy cluster in kubeconfig. Only works when there are multiple contexts in the kubeconfig.
+	Context name of legacy cluster in kubeconfig. Only works when there
+	are multiple contexts in the kubeconfig.
 
     --cluster-kubeconfig='':
 	Path of the legacy cluster's kubeconfig.
@@ -3785,8 +4223,9 @@ Options:
 	Output format. One of: json|yaml
 
     --policy-name='':
-	The name of the PropagationPolicy(or ClusterPropagationPolicy) that is automatically created after promotion.
-	If not specified, the name will be the resource name with a hash suffix that is generated by resource
+	The name of the PropagationPolicy(or ClusterPropagationPolicy) that is
+	automatically created after promotion. If not specified, the name will
+	be the resource name with a hash suffix that is generated by resource
 	metadata.
 
 Usage:
@@ -3817,23 +4256,26 @@ Options:
 	The expiration time of certificate.
 
     --cluster-name='':
-	The name of member cluster in the control plane, if not specified, the cluster of current-context is used by
-	default.
+	The name of member cluster in the control plane, if not specified, the
+	cluster of current-context is used by default.
 
     --cluster-namespace='karmada-cluster':
-	Namespace in the control plane where member cluster secrets are stored.
+	Namespace in the control plane where member cluster secrets are
+	stored.
 
     --cluster-provider='':
-	Provider of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	providers for higher availability.
+	Provider of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across providers for higher
+	availability.
 
     --cluster-region='':
-	The region of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	regions for higher availability.
+	The region of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across regions for higher
+	availability.
 
     --cluster-zones=[]:
-	The zones of the joining cluster. The Karmada scheduler can use this information to spread workloads across
-	zones for higher availability.
+	The zones of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across zones for higher availability.
 
     --context='':
 	Name of the cluster context in kubeconfig file.
@@ -3842,16 +4284,19 @@ Options:
 	The timeout to discovery karmada apiserver client.
 
     --discovery-token-ca-cert-hash=[]:
-	For token-based discovery, validate that the root CA public key matches this hash (format: "<type>:<value>").
+	For token-based discovery, validate that the root CA public key
+	matches this hash (format: "<type>:<value>").
 
     --discovery-token-unsafe-skip-ca-verification=false:
-	For token-based discovery, allow joining without --discovery-token-ca-cert-hash pinning.
+	For token-based discovery, allow joining without
+	--discovery-token-ca-cert-hash pinning.
 
     --dry-run=false:
 	Run the command in dry-run mode, without making any server requests.
 
     --enable-cert-rotation=false:
-	Enable means controller would rotate certificate for karmada-agent when the certificate is about to expire.
+	Enable means controller would rotate certificate for karmada-agent
+	when the certificate is about to expire.
 
     --karmada-agent-image='docker.io/karmada/karmada-agent:v0.0.0-master':
 	Karmada agent image.
@@ -3869,7 +4314,8 @@ Options:
 	Address of the proxy server that is used to proxy to the cluster.
 
     --token='':
-	For token-based discovery, the token used to validate cluster information fetched from the API server.
+	For token-based discovery, the token used to validate cluster
+	information fetched from the API server.
 
 Usage:
   karmadactl register [karmada-apiserver-endpoint] [options]
@@ -3913,7 +4359,8 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     --overwrite=false:
-	If true, allow taints to be overwritten, otherwise reject taint updates that overwrite existing taints.
+	If true, allow taints to be overwritten, otherwise reject taint
+	updates that overwrite existing taints.
 
 Usage:
   karmadactl taint CLUSTER NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_N [options]
@@ -3954,7 +4401,8 @@ Options:
 	A human friendly description of how this token is used.
 
     --groups=[system:bootstrappers:karmada:default-cluster-token]:
-	Extra groups that this token will authenticate as when used for authentication. Must match
+	Extra groups that this token will authenticate as when used for
+	authentication. Must match
 	"\\Asystem:bootstrappers:[a-z0-9:-]{0,255}[a-z0-9]\\z"
 
     --karmada-context='':
@@ -3964,16 +4412,17 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     --print-register-command=false:
-	Instead of printing only the token, print the full 'karmadactl register' flag needed to register the member
-	cluster using the token.
+	Instead of printing only the token, print the full 'karmadactl
+	register' flag needed to register the member cluster using the token.
 
     --ttl=24h0m0s:
-	The duration before the token is automatically deleted (e.g. 1s, 2m, 3h). If set to '0', the token will never
-	expire
+	The duration before the token is automatically deleted (e.g. 1s, 2m,
+	3h). If set to '0', the token will never expire
 
     --usages=[signing,authentication]:
-	Describes the ways in which this token can be used. You can pass --usages multiple times or provide a comma
-	separated list of options. Valid options: [signing,authentication]
+	Describes the ways in which this token can be used. You can pass
+	--usages multiple times or provide a comma separated list of options.
+	Valid options: [signing,authentication]
 
 Usage:
   karmadactl token create [options]
@@ -4063,7 +4512,8 @@ Examples:
 
 Options:
     --clusters=[]:
-	Used to specify target member clusters, for example: --clusters=member1,member2
+	Used to specify target member clusters, for example:
+	--clusters=member1,member2
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -4075,15 +4525,17 @@ Options:
 	If present, print output without headers
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --show-capacity=false:
-	Print node resources based on Capacity instead of Allocatable(default) of the nodes.
+	Print node resources based on Capacity instead of Allocatable(default)
+	of the nodes.
 
     --sort-by='':
-	If non-empty, sort nodes list using specified field. The field can be either 'cpu' or 'memory'.
+	If non-empty, sort nodes list using specified field. The field can be
+	either 'cpu' or 'memory'.
 
     --use-protocol-buffers=true:
 	Enables using protocol-buffers to access Metrics API.
@@ -4126,8 +4578,9 @@ Examples:
 
 Options:
     -A, --all-namespaces=false:
-	If present, list the requested object(s) across all namespaces. Namespace in current context is ignored even
-	if specified with --namespace.
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
 
     -C, --clusters=[]:
 	-C=member1,member2
@@ -4136,8 +4589,9 @@ Options:
 	If present, print usage of containers within a pod.
 
     --field-selector='':
-	Selector (field query) to filter on, supports '=', '==', and '!='.(e.g. --field-selector
-	key1=value1,key2=value2). The server only supports a limited number of field queries per type.
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -4152,12 +4606,13 @@ Options:
 	If present, print output without headers.
 
     -l, --selector='':
-	Selector (label query) to filter on, supports '=', '==', '!=', 'in', 'notin'.(e.g. -l
-	key1=value1,key2=value2,key3 in (value3)). Matching objects must satisfy all of the specified label
-	constraints.
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
 
     --sort-by='':
-	If non-empty, sort pods list using specified field. The field can be either 'cpu' or 'memory'.
+	If non-empty, sort pods list using specified field. The field can be
+	either 'cpu' or 'memory'.
 
     --sum=false:
 	Print the sum of the resource usage
@@ -4211,21 +4666,25 @@ Examples:
 
 Options:
     --cluster-context='':
-	Context name of cluster in kubeconfig. Only works when there are multiple contexts in the kubeconfig.
+	Context name of cluster in kubeconfig. Only works when there are
+	multiple contexts in the kubeconfig.
 
     --cluster-kubeconfig='':
 	Path of the cluster's kubeconfig.
 
     --cluster-namespace='karmada-cluster':
-	Namespace in the control plane where member cluster secrets are stored.
+	Namespace in the control plane where member cluster secrets are
+	stored.
 
     --dry-run=false:
 	Run the command in dry-run mode, without making any server requests.
 
     --force=false:
-	When set, the unjoin command will attempt to clean up resources in the member cluster before deleting the
-	Cluster object. If the cleanup fails within the timeout period, the Cluster object will still be deleted,
-	potentially leaving some resources behind in the member cluster.
+	When set, the unjoin command will attempt to clean up resources in the
+	member cluster before deleting the Cluster object. If the cleanup
+	fails within the timeout period, the Cluster object will still be
+	deleted, potentially leaving some resources behind in the member
+	cluster.
 
     --karmada-context='':
 	The name of the kubeconfig context to use
@@ -4234,8 +4693,8 @@ Options:
 	Path to the kubeconfig file to use for CLI requests.
 
     --wait=1m0s:
-	wait for the unjoin command execution process(default 60s), if there is no success after this time, timeout
-	will be returned.
+	wait for the unjoin command execution process(default 60s), if there
+	is no success after this time, timeout will be returned.
 
 Usage:
   karmadactl unjoin CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG> [options]
@@ -4262,29 +4721,33 @@ Options:
 	Deployment name of the karmada-agent component deployed.
 
     --cluster-context='':
-	Context in cluster-kubeconfig to access unregistering member cluster, optional, defaults to current context.
+	Context in cluster-kubeconfig to access unregistering member cluster,
+	optional, defaults to current context.
 
     --cluster-kubeconfig='':
 	KUBECONFIG file path to access unregistering member cluster, required.
 
     --cluster-namespace='karmada-cluster':
-	Namespace in the control plane where member cluster secrets are stored.
+	Namespace in the control plane where member cluster secrets are
+	stored.
 
     --dry-run=false:
 	Run the command in dry-run mode, without making any server requests.
 
     --karmada-config='':
-	Path of config to access karmada-apiserver, optional, defaults to fetch automatically from member cluster.
+	Path of config to access karmada-apiserver, optional, defaults to
+	fetch automatically from member cluster.
 
     --karmada-context='':
-	Context in karmada-config to access karmada-apiserver, optional, defaults to current context.
+	Context in karmada-config to access karmada-apiserver, optional,
+	defaults to current context.
 
     -n, --namespace='karmada-system':
 	Namespace of the karmada-agent component deployed.
 
     --wait=1m0s:
-	wait for the unjoin command execution process(default 60s), if there is no success after this time, timeout
-	will be returned.
+	wait for the unjoin command execution process(default 60s), if there
+	is no success after this time, timeout will be returned.
 
 Usage:
   karmadactl unregister CLUSTER_NAME [options]

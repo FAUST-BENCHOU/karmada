@@ -112,8 +112,10 @@ func (c *EndpointSliceController) SetupWithManager(mgr controllerruntime.Manager
 			return util.GetLabelValue(updateEvent.ObjectNew.GetLabels(), util.ServiceNameLabel) != "" ||
 				util.GetLabelValue(updateEvent.ObjectNew.GetLabels(), util.MultiClusterServiceNameLabel) != ""
 		},
-		DeleteFunc: func(deleteEvent event.DeleteEvent) bool {
-			return util.GetLabelValue(deleteEvent.Object.GetLabels(), util.ServiceNameLabel) != ""
+		DeleteFunc: func(_ event.DeleteEvent) bool {
+			// We don't need to watch the deletion event of the work object.
+			// The cleanup will be handled when the work is being deleted (DeletionTimestamp is set) via Update events.
+			return false
 		},
 		GenericFunc: func(event.GenericEvent) bool {
 			return false

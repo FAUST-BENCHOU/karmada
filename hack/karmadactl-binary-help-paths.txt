@@ -1,0 +1,68 @@
+# One subcommand path per line (arguments after karmadactl). Sync with extract-flags output
+# (docs/command-flags/karmadactl.txt === karmadactl ... === headers).
+# Includes completion/help/version like other binaries' Available Commands.
+addons
+addons disable
+addons enable
+addons list
+annotate
+api-resources
+api-versions
+apply
+attach
+completion
+cordon
+create
+create clusterrole
+create clusterrolebinding
+create configmap
+create cronjob
+create deployment
+create ingress
+create job
+create namespace
+create poddisruptionbudget
+create priorityclass
+create quota
+create role
+create rolebinding
+create secret
+create secret docker-registry
+create secret generic
+create secret tls
+create service
+create service clusterip
+create service externalname
+create service loadbalancer
+create service nodeport
+create serviceaccount
+create token
+deinit
+delete
+describe
+edit
+exec
+explain
+get
+help
+init
+interpret
+join
+label
+logs
+options
+patch
+promote
+register
+taint
+token
+token create
+token delete
+token list
+top
+top node
+top pod
+uncordon
+unjoin
+unregister
+version

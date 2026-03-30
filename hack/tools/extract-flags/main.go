@@ -29,7 +29,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	cliflag "k8s.io/component-base/cli/flag"
-	_ "k8s.io/component-base/logs/json/register" // register JSON log format so --log-json-* flags match component binaries
+	_ "k8s.io/component-base/logs/json/register"
 	controllerruntime "sigs.k8s.io/controller-runtime"
 
 	aggregatedapiserverapp "github.com/karmada-io/karmada/cmd/aggregated-apiserver/app"

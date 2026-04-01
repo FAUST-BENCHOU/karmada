@@ -1,0 +1,4769 @@
+karmadactl controls a Kubernetes Cluster Federation.
+
+Basic Commands:
+  explain         Get documentation for a resource
+  get             Display one or many resources in Karmada control plane and member clusters.
+  create          Create a resource from a file or from stdin
+  delete          Delete resources by file names, stdin, resources and names, or by resources and label selector
+  edit            Edit a resource on the server
+
+Cluster Registration Commands:
+  init            Install the Karmada control plane in a Kubernetes cluster
+  deinit          Remove the Karmada control plane from the Kubernetes cluster.
+  addons          Enable or disable a Karmada addon
+  join            Register a cluster to Karmada control plane with Push mode
+  unjoin          Remove a cluster from Karmada control plane
+  token           Manage bootstrap tokens for joining member clusters to Karmada
+  register        Register a cluster to Karmada control plane with Pull mode
+  unregister      Remove a pull mode cluster from Karmada control plane
+
+Cluster Management Commands:
+  cordon          Mark cluster as unschedulable
+  uncordon        Mark cluster as schedulable
+  taint           Update the taints on one or more clusters
+
+Troubleshooting and Debugging Commands:
+  attach          Attach to a running container
+  logs            Print the logs for a container in a pod in a cluster
+  exec            Execute a command in a container in a cluster
+  describe        Show details of a specific resource or group of resources in Karmada control plane or a member cluster
+  interpret       Validate, test and edit interpreter customization before applying it to the control plane
+
+Advanced Commands:
+  apply           Apply a configuration to a resource by file name or stdin and propagate them into member clusters
+  promote         Promote resources from legacy clusters to Karmada control plane
+  top             Display resource (CPU/memory) usage of member clusters
+  patch           Update fields of a resource
+
+Settings Commands:
+  label           Update the labels on a resource
+  annotate        Update the annotations on a resource
+  completion      Output shell completion code for the specified shell (bash, zsh, fish)
+
+Other Commands:
+  api-resources   Print the supported API resources on the server
+  api-versions    Print the supported API versions on the server, in the form of "group/version"
+
+Other Commands:
+  version         Print the version information
+
+Usage:
+  karmadactl [flags] [options]
+
+Use "karmadactl <command> --help" for more information about a given command.
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl addons ===
+
+Enable or disable a Karmada addon.
+
+ These addons are currently supported:
+
+  1.  karmada-descheduler
+  2.  karmada-metrics-adapter
+  3.  karmada-scheduler-estimator
+  4.  karmada-search
+
+Examples:
+  # Enable or disable Karmada addons to the karmada-host cluster
+  karmadactl addons enable karmada-search
+
+Available Commands:
+  disable       Disable karmada addons from Kubernetes
+  enable        Enable Karmada addons from Kubernetes
+  list          List karmada addons from Kubernetes
+
+Use "karmadactl addons <command> --help" for more information about a given command.
+
+
+=== karmadactl addons disable ===
+
+Disable Karmada addons from Kubernetes
+
+Examples:
+  # Disable Karmada all addons except karmada-scheduler-estimator on Kubernetes cluster
+  karmadactl addons disable all
+  
+  # Disable Karmada search on Kubernetes cluster
+  karmadactl addons disable karmada-search
+  
+  # Disable Karmada search and descheduler on Kubernetes cluster
+  karmadactl addons disable karmada-search karmada-descheduler
+  
+  # Disable karmada search and scheduler-estimator of member1 cluster to the kubernetes cluster
+  karmadactl addons disable karmada-search karmada-scheduler-estimator --cluster member1
+  
+  # Specify the host cluster kubeconfig
+  karmadactl addons disable Karmada-search --kubeconfig /root/.kube/config
+  
+  # Specify the Karmada control plane kubeconfig
+  karmadactl addons disable karmada-search --karmada-kubeconfig /etc/karmada/karmada-apiserver.config
+  
+  # Specify the namespace where Karmada components are installed
+  karmadactl addons disable karmada-search --namespace karmada-system
+
+Options:
+    -C, --cluster='':
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
+
+    --context='':
+	The name of the kubeconfig context to use.
+
+    -f, --force=false:
+	Disable addons without prompting for confirmation.
+
+    --karmada-context='':
+	The name of the karmada control plane kubeconfig context to use.
+
+    --karmada-kubeconfig='/etc/karmada/karmada-apiserver.config':
+	Path to the karmada control plane kubeconfig file.
+
+    --kubeconfig='':
+	Path to the host cluster kubeconfig file.
+
+    -n, --namespace='karmada-system':
+	namespace where Karmada components are installed.
+
+Usage:
+  karmadactl addons disable [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl addons enable ===
+
+Enable Karmada addons from Kubernetes
+
+Examples:
+  # Enable Karmada all addons except karmada-scheduler-estimator to Kubernetes cluster
+  karmadactl addons enable all
+  
+  # Enable Karmada search to the Kubernetes cluster
+  karmadactl addons enable karmada-search
+  
+  # Enable karmada search and descheduler to the kubernetes cluster
+  karmadactl addons enable karmada-search karmada-descheduler
+  
+  # Enable karmada search and scheduler-estimator of cluster member1 to the kubernetes cluster
+  karmadactl addons enable karmada-search karmada-scheduler-estimator -C member1 --member-kubeconfig /etc/karmada/member.config --member-context member1
+  
+  # Specify the host cluster kubeconfig
+  karmadactl addons enable karmada-search --kubeconfig /root/.kube/config
+  
+  # Specify the Karmada control plane kubeconfig
+  karmadactl addons enable karmada-search --karmada-kubeconfig /etc/karmada/karmada-apiserver.config
+  
+  # Specify the karmada-search image
+  karmadactl addons enable karmada-search --karmada-search-image docker.io/karmada/karmada-search:latest
+  
+  # Specify the namespace where Karmada components are installed
+  karmadactl addons enable karmada-search --namespace karmada-system
+
+Options:
+    --apiservice-timeout=30:
+	Wait apiservice ready timeout.
+
+    -C, --cluster='':
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
+
+    --context='':
+	The name of the kubeconfig context to use.
+
+    --descheduler-priority-class='system-node-critical':
+	The priority class name for the component karmada-descheduler.
+
+    --estimator-priority-class='system-node-critical':
+	The priority class name for the component karmada-scheduler-estimator.
+
+    --host-cluster-domain='cluster.local':
+	The cluster domain of karmada host cluster. (e.g.
+	--host-cluster-domain=host.karmada)
+
+    --karmada-context='':
+	The name of the karmada control plane kubeconfig context to use.
+
+    --karmada-descheduler-image='docker.io/karmada/karmada-descheduler:v0.0.0-master':
+	karmada-descheduler image
+
+    --karmada-descheduler-replicas=1:
+	karmada descheduler replica set
+
+    --karmada-estimator-replicas=1:
+	karmada-scheduler-estimator replica set
+
+    --karmada-kubeconfig='/etc/karmada/karmada-apiserver.config':
+	Path to the karmada control plane kubeconfig file.
+
+    --karmada-metrics-adapter-image='docker.io/karmada/karmada-metrics-adapter:v0.0.0-master':
+	karmada-metrics-adapter image
+
+    --karmada-metrics-adapter-replicas=1:
+	karmada-metrics-adapter replica set
+
+    --karmada-scheduler-estimator-image='docker.io/karmada/karmada-scheduler-estimator:v0.0.0-master':
+	karmada-scheduler-estimator image
+
+    --karmada-search-image='docker.io/karmada/karmada-search:v0.0.0-master':
+	karmada-search image
+
+    --karmada-search-replicas=1:
+	Karmada-search replica set
+
+    --kubeconfig='':
+	Path to the host cluster kubeconfig file.
+
+    --member-context='':
+	Member cluster's context which to deploy scheduler estimator
+
+    --member-kubeconfig='':
+	Member cluster's kubeconfig which to deploy scheduler estimator
+
+    --metrics-adapter-priority-class='system-node-critical':
+	The priority class name for the component karmada-metrics-adaptor.
+
+    -n, --namespace='karmada-system':
+	namespace where Karmada components are installed.
+
+    --pod-timeout=120:
+	Wait pod ready timeout.
+
+    --private-image-registry='':
+	Private image registry where pull images from. If set, all required
+	images will be downloaded from it, it would be useful in offline
+	installation scenarios.
+
+    --search-priority-class='system-node-critical':
+	The priority class name for the component karmada-search.
+
+Usage:
+  karmadactl addons enable [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl addons list ===
+
+List Karmada addons from Kubernetes
+
+Examples:
+  # List Karmada all addons installed in Kubernetes cluster
+  karmadactl addons list
+  
+  # List Karmada all addons included scheduler estimator of member1 installed in Kubernetes cluster
+  karmadactl addons list -C member1
+  
+  # Specify the host cluster kubeconfig
+  karmadactl addons list --kubeconfig /root/.kube/config
+  
+  # Specify the karmada control plane kubeconfig
+  karmadactl addons list --karmada-kubeconfig /etc/karmada/karmada-apiserver.config
+  
+  # Specify the namespace where Karmada components are installed
+  karmadactl addons list --namespace karmada-system
+
+Options:
+    -C, --cluster='':
+	Name of the member cluster that enables or disables the scheduler
+	estimator.
+
+    --context='':
+	The name of the kubeconfig context to use.
+
+    --karmada-context='':
+	The name of the karmada control plane kubeconfig context to use.
+
+    --karmada-kubeconfig='/etc/karmada/karmada-apiserver.config':
+	Path to the karmada control plane kubeconfig file.
+
+    --kubeconfig='':
+	Path to the host cluster kubeconfig file.
+
+    -n, --namespace='karmada-system':
+	namespace where Karmada components are installed.
+
+Usage:
+  karmadactl addons list [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl annotate ===
+
+Update the annotations on one or more resources.
+
+ All Kubernetes objects support the ability to store additional data with the object as annotations. Annotations are key/value pairs that can be larger than labels and include arbitrary string values such as structured JSON. Tools and system extensions may use annotations to store their own data.
+
+ Attempting to set an annotation that already exists will fail unless --overwrite is set. If --resource-version is specified and does not match the current resource version on the server the command will fail.
+
+Use "karmadactl api-resources" for a complete list of supported resources.
+
+Examples:
+  # Update deployment 'foo' with the annotation 'work.karmada.io/conflict-resolution' and the value 'overwrite'
+  # If the same annotation is set multiple times, only the last value will be applied
+  [1]karmadactl annotate deployment foo work.karmada.io/conflict-resolution='overwrite'
+  
+  # Update a deployment identified by type and name in "deployment.json"
+  [1]%!s(MISSING) annotate -f deployment.json work.karmada.io/conflict-resolution='overwrite'
+  
+  # Update deployment 'foo' with the annotation 'work.karmada.io/conflict-resolution' and the value 'abort', overwriting any existing value
+  [1]%!s(MISSING) annotate --overwrite deployment foo work.karmada.io/conflict-resolution='abort'
+  
+  # Update all deployments in the namespace
+  [1]%!s(MISSING) annotate deployment --all work.karmada.io/conflict-resolution='abort'
+  
+  # Update deployment 'foo' only if the resource is unchanged from version 1
+  [1]%!s(MISSING) annotate deployment foo work.karmada.io/conflict-resolution='abort' --resource-version=1
+  
+  # Update deployment 'foo' by removing an annotation named 'work.karmada.io/conflict-resolution' if it exists
+  # Does not require the --overwrite flag
+  [1]%!s(MISSING) annotate deployment foo work.karmada.io/conflict-resolution-
+
+Options:
+    --all=false:
+	Select all resources, in the namespace of the specified resource
+	types.
+
+    -A, --all-namespaces=false:
+	If true, check the specified action in all namespaces.
+
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-annotate':
+	Name of the manager used to track field ownership.
+
+    --field-selector='':
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files identifying the resource to
+	update the annotation
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    --list=false:
+	If true, display the annotations for a given resource.
+
+    --local=false:
+	If true, annotation will NOT contact api-server but run locally.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --overwrite=false:
+	If true, allow annotations to be overwritten, otherwise reject
+	annotation updates that overwrite existing annotations.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --resource-version='':
+	If non-empty, the annotation update will only succeed if this is the
+	current resource-version for the object. Only valid when specifying a
+	single resource.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+Usage:
+  karmadactl annotate [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl api-resources ===
+
+Print the supported API resources on the server.
+
+Examples:
+  # Print the supported API resources in Karmada control plane
+  karmadactl api-resources
+  
+  # Print the supported API resources with more information in cluster(member1)
+  karmadactl api-resources -o wide --operation-scope=members --cluster=member1
+  
+  # Print the supported API resources sorted by a column in Karmada control plane
+  karmadactl api-resources --sort-by=name
+  
+  # Print the supported namespaced resources in Karmada control plane
+  karmadactl api-resources --namespaced=true
+  
+  # Print the supported non-namespaced resources in Karmada control plane
+  karmadactl api-resources --namespaced=false
+  
+  # Print the supported API resources with a specific APIGroup in Karmada control plane
+  karmadactl api-resources --api-group=rbac.authorization.k8s.io
+
+Options:
+    --api-group='':
+	Limit to resources in the specified API group.
+
+    --cached=false:
+	Use the cached list of resources if available.
+
+    --categories=[]:
+	Limit to resources that belong to the specified categories.
+
+    --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --namespaced=true:
+	If false, non-namespaced resources will be returned, otherwise
+	returning namespaced resources by default.
+
+    --no-headers=false:
+	When using the default or custom-column output format, don't print
+	headers (default print headers).
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, wide).
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --sort-by='':
+	If non-empty, sort list of resources using specified field. The field
+	can be either 'name' or 'kind'.
+
+    --verbs=[]:
+	Limit to resources that support the specified verbs.
+
+Usage:
+  karmadactl api-resources [flags] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl api-versions ===
+
+Print the supported API versions on the server, in the form of "group/version".
+
+Examples:
+  # Print the supported API versions
+  karmadactl api-versions
+  
+  # Print the supported API versions in cluster(member1)
+  karmadactl api-versions --operation-scope=members --cluster=member1
+
+Options:
+    --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+Usage:
+  karmadactl api-versions [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl apply ===
+
+Apply a configuration to a resource by file name or stdin and propagate them into member clusters. The resource name must be specified. This resource will be created if it doesn't exist yet. To use 'apply', always create the resource initially with either 'apply' or 'create --save-config'.
+
+ JSON and YAML formats are accepted.
+
+ Alpha Disclaimer: the --prune functionality is not yet complete. Do not use unless you are aware of what the current state is. See https://issues.k8s.io/34274.
+
+ Note: It implements the function of 'kubectl apply' by default. If you want to propagate them into member clusters, please use %[1]s apply --all-clusters'.
+
+Examples:
+  # Apply the configuration without propagation into member clusters. It acts as 'kubectl apply'.
+  karmadactl apply -f manifest.yaml
+  
+  # Apply the configuration with propagation into specific member clusters.
+  karmadactl apply -f manifest.yaml --cluster member1,member2
+  
+  # Apply resources from a directory and propagate them into all member clusters.
+  karmadactl apply -f dir/ --all-clusters
+  
+  # Apply resources from a directory containing kustomization.yaml - e.g.
+  # dir/kustomization.yaml, and propagate them into all member clusters
+  karmadactl apply -k dir/ --all-clusters
+
+Options:
+    --all=false:
+	Select all resources in the namespace of the specified resource types.
+
+    --all-clusters=false:
+	If present, propagates a group of resources to all member clusters.
+
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --cascade='background':
+	Must be "background", "orphan", or "foreground". Selects the deletion
+	cascading strategy for the dependents (e.g. Pods created by a
+	ReplicationController). Defaults to background.
+
+    -C, --cluster=[]:
+	If present, propagates a group of resources to specified clusters.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-client-side-apply':
+	Name of the manager used to track field ownership.
+
+    -f, --filename=[]:
+	The files that contain the configurations to apply.
+
+    --force=false:
+	If true, immediately remove resources from API and bypass graceful
+	deletion. Note that immediate deletion of some resources may result in
+	inconsistency or data loss and requires confirmation.
+
+    --force-conflicts=false:
+	If true, server-side apply will force the changes against conflicts.
+
+    --grace-period=-1:
+	Period of time in seconds given to the resource to terminate
+	gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can
+	only be set to 0 when --force is true (force deletion).
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process a kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    --openapi-patch=true:
+	If true, use openapi to calculate diff when the openapi presents and
+	the resource can be found in the openapi spec. Otherwise, fall back to
+	use baked-in types.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --overwrite=true:
+	Automatically resolve conflicts between the modified and live
+	configuration by using values from the modified configuration
+
+    --prune=false:
+	Automatically delete resource objects, that do not appear in the
+	configs and are created by either apply or create --save-config.
+	Should be used with either -l or --all.
+
+    --prune-allowlist=[]:
+	Overwrite the default allowlist with <group/version/kind> for --prune
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --server-side=false:
+	If true, apply runs in the server instead of the client.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --subresource='':
+	If specified, apply will operate on the subresource of the requested
+	object.  Only allowed when using --server-side.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --timeout=0s:
+	The length of time to wait before giving up on a delete, zero means
+	determine a timeout from the size of the object
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --wait=false:
+	If true, wait for resources to be gone before returning. This waits
+	for finalizers.
+
+Usage:
+  karmadactl apply (-f FILENAME | -k DIRECTORY) [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl attach ===
+
+Attach to a process that is already running inside an existing container.
+
+Examples:
+  # Get output from running pod mypod in cluster(member1); use the 'kubectl.kubernetes.io/default-container' annotation
+  # for selecting the container to be attached or the first container in the pod will be chosen
+  karmadactl attach mypod --cluster=member1
+  
+  # Get output from ruby-container from pod mypod in cluster(member1)
+  karmadactl attach mypod -c ruby-container --cluster=member1
+  
+  # Switch to raw terminal mode; sends stdin to 'bash' in ruby-container from pod mypod in Karmada control plane
+  # and sends stdout/stderr from 'bash' back to the client
+  karmadactl attach mypod -c ruby-container -i -t
+  
+  # Get output from the first pod of a replica set named nginx in cluster(member1)
+  karmadactl attach rs/nginx --cluster=member1
+
+Options:
+    --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
+
+    -c, --container='':
+	Container name. If omitted, use the
+	kubectl.kubernetes.io/default-container annotation for selecting the
+	container to be attached or the first container in the pod will be
+	chosen
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+    --pod-running-timeout=1m0s:
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
+
+    -q, --quiet=false:
+	Only print output from the remote session
+
+    -i, --stdin=false:
+	Pass stdin to the container
+
+    -t, --tty=false:
+	Stdin is a TTY
+
+Usage:
+  karmadactl attach (POD | TYPE/NAME) -c CONTAINER [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl completion ===
+
+Output shell completion code for the specified shell (bash, zsh, fish). The shell code must be evaluated to provide interactive completion of karmadactl commands. This can be done by sourcing it from the .bash_profile.
+
+ Note for zsh users: zsh completions are only supported in versions of zsh >= 5.2.
+
+Examples:
+  # Installing bash completion on Linux
+  ## If bash-completion is not installed on Linux, install the 'bash-completion' package
+  1. apt-get install bash-completion
+  2. source /usr/share/bash-completion/bash_completion
+  ## Load the karmadactl completion code for bash into the current shell
+  source <(karmadactl completion bash)
+  ## Or, write bash completion code to a file and source it from .bash_profile
+  1. karmadactl completion bash > ~/.kube/completion.bash.inc
+  2. echo "source '$HOME/.kube/completion.bash.inc'" >> $HOME/.bash_profile
+  3. source $HOME/.bash_profile
+  
+  # Load the karmadactl completion code for zsh into the current shell
+  source <(karmadactl completion zsh)
+  # Set the karmadactl completion code for zsh to autoload on startup
+  karmadactl completion zsh > "${fpath[1]}/karmadactl"
+  
+  # Load the karmadactl completion code for fish into the current shell
+  karmadactl completion fish | source
+  # To load completions for each session, execute once:
+  karmadactl completion fish > ~/.config/fish/completions/karmadactl.fish
+
+Usage:
+  karmadactl completion SHELL [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl cordon ===
+
+Mark cluster as unschedulable.
+
+Examples:
+  # Mark cluster "foo" as unschedulable.
+  karmadactl cordon foo
+
+Options:
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+Usage:
+  karmadactl cordon CLUSTER [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create ===
+
+Create a resource from a file or from stdin.
+
+ JSON and YAML formats are accepted.
+
+Examples:
+  # Create a pod using the data in pod.json
+  karmadactl create -f ./pod.json
+  
+  # Create a pod based on the JSON passed into stdin
+  cat pod.json | karmadactl create -f -
+  
+  # Edit the data in registry.yaml in JSON then create the resource using the edited data
+  karmadactl create -f registry.yaml --edit -o json
+
+Available Commands:
+  clusterrole           Create a cluster role
+  clusterrolebinding    Create a cluster role binding for a particular cluster role
+  configmap             Create a config map from a local file, directory or literal value
+  cronjob               Create a cron job with the specified name
+  deployment            Create a deployment with the specified name
+  ingress               Create an ingress with the specified name
+  job                   Create a job with the specified name
+  namespace             Create a namespace with the specified name
+  poddisruptionbudget   Create a pod disruption budget with the specified name
+  priorityclass         Create a priority class with the specified name
+  quota                 Create a quota with the specified name
+  role                  Create a role with single rule
+  rolebinding           Create a role binding for a particular role or cluster role
+  secret                Create a secret using a specified subcommand
+  service               Create a service using a specified subcommand
+  serviceaccount        Create a service account with the specified name
+  token                 Request a service account token
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --edit=false:
+	Edit the API resource before creating
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files to use to create the resource
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --raw='':
+	Raw URI to POST to the server.  Uses the transport specified by the
+	kubeconfig file.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --windows-line-endings=false:
+	Only relevant if --edit=true. Defaults to the line ending native to
+	your platform.
+
+Usage:
+  karmadactl create -f FILENAME [options]
+
+Use "karmadactl create <command> --help" for more information about a given command.
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl create clusterrole ===
+
+Create a cluster role.
+
+Examples:
+  # Create a cluster role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+  kubectl create clusterrole pod-reader --verb=get,list,watch --resource=pods
+  
+  # Create a cluster role named "pod-reader" with ResourceName specified
+  kubectl create clusterrole pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+  
+  # Create a cluster role named "foo" with API Group specified
+  kubectl create clusterrole foo --verb=get,list,watch --resource=rs.apps
+  
+  # Create a cluster role named "foo" with SubResource specified
+  kubectl create clusterrole foo --verb=get,list,watch --resource=pods,pods/status
+  
+  # Create a cluster role name "foo" with NonResourceURL specified
+  kubectl create clusterrole "foo" --verb=get --non-resource-url=/logs/*
+  
+  # Create a cluster role name "monitoring" with AggregationRule specified
+  kubectl create clusterrole monitoring --aggregation-rule="rbac.example.com/aggregate-to-monitoring=true"
+
+Options:
+    --aggregation-rule=:
+	An aggregation label selector for combining ClusterRoles.
+
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --non-resource-url=[]:
+	A partial url that user should have access to.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --resource=[]:
+	Resource that the rule applies to
+
+    --resource-name=[]:
+	Resource in the white list that the rule applies to, repeat this flag
+	for multiple items
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --verb=[]:
+	Verb that applies to the resources contained in the rule
+
+Usage:
+  karmadactl create clusterrole NAME --verb=verb --resource=resource.group [--resource-name=resourcename] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create clusterrolebinding ===
+
+Create a cluster role binding for a particular cluster role.
+
+Examples:
+  # Create a cluster role binding for user1, user2, and group1 using the cluster-admin cluster role
+  kubectl create clusterrolebinding cluster-admin --clusterrole=cluster-admin --user=user1 --user=user2 --group=group1
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --clusterrole='':
+	ClusterRole this ClusterRoleBinding should reference
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --group=[]:
+	Groups to bind to the clusterrole. The flag can be repeated to add
+	multiple groups.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --serviceaccount=[]:
+	Service accounts to bind to the clusterrole, in the format
+	<namespace>:<name>. The flag can be repeated to add multiple service
+	accounts.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --user=[]:
+	Usernames to bind to the clusterrole. The flag can be repeated to add
+	multiple users.
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create clusterrolebinding NAME --clusterrole=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create configmap ===
+
+Create a config map based on a file, directory, or specified literal value.
+
+ A single config map may package one or more key/value pairs.
+
+ When creating a config map based on a file, the key will default to the basename of the file, and the value will default to the file content.  If the basename is an invalid key, you may specify an alternate key.
+
+ When creating a config map based on a directory, each file whose basename is a valid key in the directory will be packaged into the config map.  Any directory entries except regular files are ignored (e.g. subdirectories, symlinks, devices, pipes, etc).
+
+Aliases:
+configmap, cm
+
+Examples:
+  # Create a new config map named my-config based on folder bar
+  kubectl create configmap my-config --from-file=path/to/bar
+  
+  # Create a new config map named my-config with specified keys instead of file basenames on disk
+  kubectl create configmap my-config --from-file=key1=/path/to/bar/file1.txt --from-file=key2=/path/to/bar/file2.txt
+  
+  # Create a new config map named my-config with key1=config1 and key2=config2
+  kubectl create configmap my-config --from-literal=key1=config1 --from-literal=key2=config2
+  
+  # Create a new config map named my-config from the key=value pairs in the file
+  kubectl create configmap my-config --from-file=path/to/bar
+  
+  # Create a new config map named my-config from an env file
+  kubectl create configmap my-config --from-env-file=path/to/foo.env --from-env-file=path/to/bar.env
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --append-hash=false:
+	Append a hash of the configmap to its name.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --from-env-file=[]:
+	Specify the path to a file to read lines of key=val pairs to create a
+	configmap.
+
+    --from-file=[]:
+	Key file can be specified using its file path, in which case file
+	basename will be used as configmap key, or optionally with a key and
+	file path, in which case the given key will be used.  Specifying a
+	directory will iterate each named file in the directory whose basename
+	is a valid configmap key.
+
+    --from-literal=[]:
+	Specify a key and literal value to insert in configmap (i.e.
+	mykey=somevalue)
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create configmap NAME [--from-file=[key=]source] [--from-literal=key1=value1] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create cronjob ===
+
+Create a cron job with the specified name.
+
+Aliases:
+cronjob, cj
+
+Examples:
+  # Create a cron job
+  kubectl create cronjob my-job --image=busybox --schedule="*/1 * * * *"
+  
+  # Create a cron job with a command
+  kubectl create cronjob my-job --image=busybox --schedule="*/1 * * * *" -- date
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --image='':
+	Image name to run.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --restart='':
+	job's restart policy. supported values: OnFailure, Never
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --schedule='':
+	A schedule in the Cron format the job should be run with.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create cronjob NAME --image=image --schedule='0/5 * * * ?' -- [COMMAND] [args...] [flags] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create deployment ===
+
+Create a deployment with the specified name.
+
+Aliases:
+deployment, deploy
+
+Examples:
+  # Create a deployment named my-dep that runs the busybox image
+  kubectl create deployment my-dep --image=busybox
+  
+  # Create a deployment with a command
+  kubectl create deployment my-dep --image=busybox -- date
+  
+  # Create a deployment named my-dep that runs the nginx image with 3 replicas
+  kubectl create deployment my-dep --image=nginx --replicas=3
+  
+  # Create a deployment named my-dep that runs the busybox image and expose port 5701
+  kubectl create deployment my-dep --image=busybox --port=5701
+  
+  # Create a deployment named my-dep that runs multiple containers
+  kubectl create deployment my-dep --image=busybox:latest --image=ubuntu:latest --image=nginx
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --image=[]:
+	Image names to run. A deployment can have multiple images set for
+	multi-container pod.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --port=-1:
+	The containerPort that this deployment exposes.
+
+    -r, --replicas=1:
+	Number of replicas to create. Default is 1.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create deployment NAME --image=image -- [COMMAND] [args...] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create ingress ===
+
+Create an ingress with the specified name.
+
+Aliases:
+ingress, ing
+
+Examples:
+  # Create a single ingress called 'simple' that directs requests to foo.com/bar to svc
+  # svc1:8080 with a TLS secret "my-cert"
+  kubectl create ingress simple --rule="foo.com/bar=svc1:8080,tls=my-cert"
+  
+  # Create a catch all ingress of "/path" pointing to service svc:port and Ingress Class as "otheringress"
+  kubectl create ingress catch-all --class=otheringress --rule="/path=svc:port"
+  
+  # Create an ingress with two annotations: ingress.annotation1 and ingress.annotations2
+  kubectl create ingress annotated --class=default --rule="foo.com/bar=svc:port" \
+  --annotation ingress.annotation1=foo \
+  --annotation ingress.annotation2=bla
+  
+  # Create an ingress with the same host and multiple paths
+  kubectl create ingress multipath --class=default \
+  --rule="foo.com/=svc:port" \
+  --rule="foo.com/admin/=svcadmin:portadmin"
+  
+  # Create an ingress with multiple hosts and the pathType as Prefix
+  kubectl create ingress ingress1 --class=default \
+  --rule="foo.com/path*=svc:8080" \
+  --rule="bar.com/admin*=svc2:http"
+  
+  # Create an ingress with TLS enabled using the default ingress certificate and different path types
+  kubectl create ingress ingtls --class=default \
+  --rule="foo.com/=svc:https,tls" \
+  --rule="foo.com/path/subpath*=othersvc:8080"
+  
+  # Create an ingress with TLS enabled using a specific secret and pathType as Prefix
+  kubectl create ingress ingsecret --class=default \
+  --rule="foo.com/*=svc:8080,tls=secret1"
+  
+  # Create an ingress with a default backend
+  kubectl create ingress ingdefault --class=default \
+  --default-backend=defaultsvc:http \
+  --rule="foo.com/*=svc:8080,tls=secret1"
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --annotation=[]:
+	Annotation to insert in the ingress object, in the format
+	annotation=value
+
+    --class='':
+	Ingress Class to be used
+
+    --default-backend='':
+	Default service for backend, in format of svcname:port
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --rule=[]:
+	Rule in format host/path=service:port[,tls=secretname]. Paths
+	containing the leading character '*' are considered pathType=Prefix.
+	tls argument is optional.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create ingress NAME --rule=host/path=service:port[,tls[=secret]]  [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create job ===
+
+Create a job with the specified name.
+
+Examples:
+  # Create a job
+  kubectl create job my-job --image=busybox
+  
+  # Create a job with a command
+  kubectl create job my-job --image=busybox -- date
+  
+  # Create a job from a cron job named "a-cronjob"
+  kubectl create job test-job --from=cronjob/a-cronjob
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --from='':
+	The name of the resource to create a Job from (only CronJob is
+	supported).
+
+    --image='':
+	Image name to run.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create job NAME --image=image [--from=cronjob/name] -- [COMMAND] [args...] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create namespace ===
+
+Create a namespace with the specified name.
+
+Aliases:
+namespace, ns
+
+Examples:
+  # Create a new namespace named my-namespace
+  kubectl create namespace my-namespace
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create namespace NAME [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create poddisruptionbudget ===
+
+Create a pod disruption budget with the specified name, selector, and desired minimum available pods.
+
+Aliases:
+poddisruptionbudget, pdb
+
+Examples:
+  # Create a pod disruption budget named my-pdb that will select all pods with the app=rails label
+  # and require at least one of them being available at any point in time
+  kubectl create poddisruptionbudget my-pdb --selector=app=rails --min-available=1
+  
+  # Create a pod disruption budget named my-pdb that will select all pods with the app=nginx label
+  # and require at least half of the pods selected to be available at any point in time
+  kubectl create pdb my-pdb --selector=app=nginx --min-available=50%
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --max-unavailable='':
+	The maximum number or percentage of unavailable pods this budget
+	requires.
+
+    --min-available='':
+	The minimum number or percentage of available pods this budget
+	requires.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --selector='':
+	A label selector to use for this budget. Only equality-based selector
+	requirements are supported.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create poddisruptionbudget NAME --selector=SELECTOR --min-available=N [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create priorityclass ===
+
+Create a priority class with the specified name, value, globalDefault and description.
+
+Aliases:
+priorityclass, pc
+
+Examples:
+  # Create a priority class named high-priority
+  kubectl create priorityclass high-priority --value=1000 --description="high priority"
+  
+  # Create a priority class named default-priority that is considered as the global default priority
+  kubectl create priorityclass default-priority --value=1000 --global-default=true --description="default priority"
+  
+  # Create a priority class named high-priority that cannot preempt pods with lower priority
+  kubectl create priorityclass high-priority --value=1000 --description="high priority" --preemption-policy="Never"
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --description='':
+	description is an arbitrary string that usually provides guidelines on
+	when this priority class should be used.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --global-default=false:
+	global-default specifies whether this PriorityClass should be
+	considered as the default priority.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --preemption-policy='PreemptLowerPriority':
+	preemption-policy is the policy for preempting pods with lower
+	priority.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --value=0:
+	the value of this priority class.
+
+Usage:
+  karmadactl create priorityclass NAME --value=VALUE --global-default=BOOL [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create quota ===
+
+Create a resource quota with the specified name, hard limits, and optional scopes.
+
+Aliases:
+quota, resourcequota
+
+Examples:
+  # Create a new resource quota named my-quota
+  kubectl create quota my-quota --hard=cpu=1,memory=1G,pods=2,services=3,replicationcontrollers=2,resourcequotas=1,secrets=5,persistentvolumeclaims=10
+  
+  # Create a new resource quota named best-effort
+  kubectl create quota best-effort --hard=pods=100 --scopes=BestEffort
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --hard='':
+	A comma-delimited set of resource=quantity pairs that define a hard
+	limit.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --scopes='':
+	A comma-delimited set of quota scopes that must all match each object
+	tracked by the quota.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create quota NAME [--hard=key1=value1,key2=value2] [--scopes=Scope1,Scope2] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create role ===
+
+Create a role with single rule.
+
+Examples:
+  # Create a role named "pod-reader" that allows user to perform "get", "watch" and "list" on pods
+  kubectl create role pod-reader --verb=get --verb=list --verb=watch --resource=pods
+  
+  # Create a role named "pod-reader" with ResourceName specified
+  kubectl create role pod-reader --verb=get --resource=pods --resource-name=readablepod --resource-name=anotherpod
+  
+  # Create a role named "foo" with API Group specified
+  kubectl create role foo --verb=get,list,watch --resource=rs.apps
+  
+  # Create a role named "foo" with SubResource specified
+  kubectl create role foo --verb=get,list,watch --resource=pods,pods/status
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --resource=[]:
+	Resource that the rule applies to
+
+    --resource-name=[]:
+	Resource in the white list that the rule applies to, repeat this flag
+	for multiple items
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --verb=[]:
+	Verb that applies to the resources contained in the rule
+
+Usage:
+  karmadactl create role NAME --verb=verb --resource=resource.group/subresource [--resource-name=resourcename] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create rolebinding ===
+
+Create a role binding for a particular role or cluster role.
+
+Examples:
+  # Create a role binding for user1, user2, and group1 using the admin cluster role
+  kubectl create rolebinding admin --clusterrole=admin --user=user1 --user=user2 --group=group1
+  
+  # Create a role binding for service account monitoring:sa-dev using the admin role
+  kubectl create rolebinding admin-binding --role=admin --serviceaccount=monitoring:sa-dev
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --clusterrole='':
+	ClusterRole this RoleBinding should reference
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --group=[]:
+	Groups to bind to the role. The flag can be repeated to add multiple
+	groups.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --role='':
+	Role this RoleBinding should reference
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --serviceaccount=[]:
+	Service accounts to bind to the role, in the format
+	<namespace>:<name>. The flag can be repeated to add multiple service
+	accounts.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --user=[]:
+	Usernames to bind to the role. The flag can be repeated to add
+	multiple users.
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create rolebinding NAME --clusterrole=NAME|--role=NAME [--user=username] [--group=groupname] [--serviceaccount=namespace:serviceaccountname] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create secret ===
+
+Create a secret with specified type.
+
+ A docker-registry type secret is for accessing a container registry.
+
+ A generic type secret indicate an Opaque secret type.
+
+ A tls type secret holds TLS certificate and its associated key.
+
+Available Commands:
+  docker-registry   Create a secret for use with a Docker registry
+  generic           Create a secret from a local file, directory, or literal value
+  tls               Create a TLS secret
+
+Usage:
+  karmadactl create secret (docker-registry | generic | tls) [options]
+
+Use "karmadactl create secret <command> --help" for more information about a given command.
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create secret docker-registry ===
+
+Create a new secret for use with Docker registries.
+        
+        Dockercfg secrets are used to authenticate against Docker registries.
+        
+        When using the Docker command line to push images, you can authenticate to a given registry by running:
+        '$ docker login DOCKER_REGISTRY_SERVER --username=DOCKER_USER --password=DOCKER_PASSWORD --email=DOCKER_EMAIL'.
+        
+ That produces a ~/.dockercfg file that is used by subsequent 'docker push' and 'docker pull' commands to authenticate to the registry. The email address is optional.
+
+        When creating applications, you may have a Docker registry that requires authentication.  In order for the
+        nodes to pull images on your behalf, they must have the credentials.  You can provide this information
+        by creating a dockercfg secret and attaching it to your service account.
+
+Examples:
+  # If you do not already have a .dockercfg file, create a dockercfg secret directly
+  kubectl create secret docker-registry my-secret --docker-server=DOCKER_REGISTRY_SERVER --docker-username=DOCKER_USER --docker-password=DOCKER_PASSWORD --docker-email=DOCKER_EMAIL
+  
+  # Create a new secret named my-secret from ~/.docker/config.json
+  kubectl create secret docker-registry my-secret --from-file=path/to/.docker/config.json
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --append-hash=false:
+	Append a hash of the secret to its name.
+
+    --docker-email='':
+	Email for Docker registry
+
+    --docker-password='':
+	Password for Docker registry authentication
+
+    --docker-server='https://index.docker.io/v1/':
+	Server location for Docker registry
+
+    --docker-username='':
+	Username for Docker registry authentication
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --from-file=[]:
+	Key files can be specified using their file path, in which case a
+	default name of .dockerconfigjson will be given to them, or optionally
+	with a name and file path, in which case the given name will be used.
+	Specifying a directory will iterate each named file in the directory
+	that is a valid secret key. For this command, the key should always be
+	.dockerconfigjson.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create secret docker-registry NAME --docker-username=user --docker-password=password --docker-email=email [--docker-server=string] [--from-file=[key=]source] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create secret generic ===
+
+Create a secret based on a file, directory, or specified literal value.
+
+ A single secret may package one or more key/value pairs.
+
+ When creating a secret based on a file, the key will default to the basename of the file, and the value will default to the file content. If the basename is an invalid key or you wish to chose your own, you may specify an alternate key.
+
+ When creating a secret based on a directory, each file whose basename is a valid key in the directory will be packaged into the secret. Any directory entries except regular files are ignored (e.g. subdirectories, symlinks, devices, pipes, etc).
+
+Examples:
+  # Create a new secret named my-secret with keys for each file in folder bar
+  kubectl create secret generic my-secret --from-file=path/to/bar
+  
+  # Create a new secret named my-secret with specified keys instead of names on disk
+  kubectl create secret generic my-secret --from-file=ssh-privatekey=path/to/id_rsa --from-file=ssh-publickey=path/to/id_rsa.pub
+  
+  # Create a new secret named my-secret with key1=supersecret and key2=topsecret
+  kubectl create secret generic my-secret --from-literal=key1=supersecret --from-literal=key2=topsecret
+  
+  # Create a new secret named my-secret using a combination of a file and a literal
+  kubectl create secret generic my-secret --from-file=ssh-privatekey=path/to/id_rsa --from-literal=passphrase=topsecret
+  
+  # Create a new secret named my-secret from env files
+  kubectl create secret generic my-secret --from-env-file=path/to/foo.env --from-env-file=path/to/bar.env
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --append-hash=false:
+	Append a hash of the secret to its name.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --from-env-file=[]:
+	Specify the path to a file to read lines of key=val pairs to create a
+	secret.
+
+    --from-file=[]:
+	Key files can be specified using their file path, in which case a
+	default name will be given to them, or optionally with a name and file
+	path, in which case the given name will be used.  Specifying a
+	directory will iterate each named file in the directory that is a
+	valid secret key.
+
+    --from-literal=[]:
+	Specify a key and literal value to insert in secret (i.e.
+	mykey=somevalue)
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --type='':
+	The type of secret to create
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create secret generic NAME [--type=string] [--from-file=[key=]source] [--from-literal=key1=value1] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create secret tls ===
+
+Create a TLS secret from the given public/private key pair.
+
+ The public/private key pair must exist beforehand. The public key certificate must be .PEM encoded and match the given private key.
+
+Examples:
+  # Create a new TLS secret named tls-secret with the given key pair
+  kubectl create secret tls tls-secret --cert=path/to/tls.crt --key=path/to/tls.key
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --append-hash=false:
+	Append a hash of the secret to its name.
+
+    --cert='':
+	Path to PEM encoded public key certificate.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --key='':
+	Path to private key associated with given certificate.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create secret tls NAME --cert=path/to/cert/file --key=path/to/key/file [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create service ===
+
+Create a service using a specified subcommand.
+
+Aliases:
+service, svc
+
+Available Commands:
+  clusterip      Create a ClusterIP service
+  externalname   Create an ExternalName service
+  loadbalancer   Create a LoadBalancer service
+  nodeport       Create a NodePort service
+
+Usage:
+  karmadactl create service [flags] [options]
+
+Use "karmadactl create service <command> --help" for more information about a given command.
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create service clusterip ===
+
+Create a ClusterIP service with the specified name.
+
+Examples:
+  # Create a new ClusterIP service named my-cs
+  kubectl create service clusterip my-cs --tcp=5678:8080
+  
+  # Create a new ClusterIP service named my-cs (in headless mode)
+  kubectl create service clusterip my-cs --clusterip="None"
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --clusterip='':
+	Assign your own ClusterIP or set to 'None' for a 'headless' service
+	(no loadbalancing).
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --tcp=[]:
+	Port pairs can be specified as '<port>:<targetPort>'.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create service clusterip NAME [--tcp=<port>:<targetPort>] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create service externalname ===
+
+Create an ExternalName service with the specified name.
+
+ ExternalName service references to an external DNS address instead of only pods, which will allow application authors to reference services that exist off platform, on other clusters, or locally.
+
+Examples:
+  # Create a new ExternalName service named my-ns
+  kubectl create service externalname my-ns --external-name bar.com
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --external-name='':
+	External name of service
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --tcp=[]:
+	Port pairs can be specified as '<port>:<targetPort>'.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create service externalname NAME --external-name external.name [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create service loadbalancer ===
+
+Create a LoadBalancer service with the specified name.
+
+Examples:
+  # Create a new LoadBalancer service named my-lbs
+  kubectl create service loadbalancer my-lbs --tcp=5678:8080
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --tcp=[]:
+	Port pairs can be specified as '<port>:<targetPort>'.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create service loadbalancer NAME [--tcp=port:targetPort] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create service nodeport ===
+
+Create a NodePort service with the specified name.
+
+Examples:
+  # Create a new NodePort service named my-ns
+  kubectl create service nodeport my-ns --tcp=5678:8080
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    --node-port=0:
+	Port used to expose the service on each node in a cluster.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --tcp=[]:
+	Port pairs can be specified as '<port>:<targetPort>'.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create service nodeport NAME [--tcp=port:targetPort] [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create serviceaccount ===
+
+Create a service account with the specified name.
+
+Aliases:
+serviceaccount, sa
+
+Examples:
+  # Create a new service account named my-service-account
+  kubectl create serviceaccount my-service-account
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-create':
+	Name of the manager used to track field ownership.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+Usage:
+  karmadactl create serviceaccount NAME [--dry-run=server|client|none] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl create token ===
+
+Request a service account token.
+
+Examples:
+  # Request a token to authenticate to the kube-apiserver as the service account "myapp" in the current namespace
+  kubectl create token myapp
+  
+  # Request a token for a service account in a custom namespace
+  kubectl create token myapp --namespace myns
+  
+  # Request a token with a custom expiration
+  kubectl create token myapp --duration 10m
+  
+  # Request a token with a custom audience
+  kubectl create token myapp --audience https://example.com
+  
+  # Request a token bound to an instance of a Secret object
+  kubectl create token myapp --bound-object-kind Secret --bound-object-name mysecret
+  
+  # Request a token bound to an instance of a Secret object with a specific UID
+  kubectl create token myapp --bound-object-kind Secret --bound-object-name mysecret --bound-object-uid 0d4691ed-659b-4935-a832-355f77ee47cc
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --audience=[]:
+	Audience of the requested token. If unset, defaults to requesting a
+	token for use with the Kubernetes API server. May be repeated to
+	request a token valid for multiple audiences.
+
+    --bound-object-kind='':
+	Kind of an object to bind the token to. Supported kinds are Node, Pod,
+	Secret. If set, --bound-object-name must be provided.
+
+    --bound-object-name='':
+	Name of an object to bind the token to. The token will expire when the
+	object is deleted. Requires --bound-object-kind.
+
+    --bound-object-uid='':
+	UID of an object to bind the token to. Requires --bound-object-kind
+	and --bound-object-name. If unset, the UID of the existing object is
+	used.
+
+    --duration=0s:
+	Requested lifetime of the issued token. If not set or if set to 0, the
+	lifetime will be determined by the server automatically. The server
+	may return a token with a longer or shorter lifetime.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+Usage:
+  karmadactl create token SERVICE_ACCOUNT_NAME [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl deinit ===
+
+Remove the Karmada control plane from the Kubernetes cluster.
+
+Examples:
+  # Remove Karmada from the Kubernetes cluster.
+  karmadactl deinit
+
+Options:
+    --context='':
+	The name of the kubeconfig context to use
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    -f, --force=false:
+	Reset cluster without prompting for confirmation.
+
+    --kubeconfig='':
+	Path to the host cluster kubeconfig file.
+
+    -n, --namespace='karmada-system':
+	namespace where Karmada components are installed.
+
+    --purge-namespace=false:
+	Run the command with purge-namespace, the namespace which Karmada
+	components were installed will be deleted.
+
+Usage:
+  karmadactl deinit [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl delete ===
+
+Delete resources by file names, stdin, resources and names, or by resources and label selector.
+
+ JSON and YAML formats are accepted. Only one type of argument may be specified: file names, resources and names, or resources and label selector.
+
+ Some resources, such as pods, support graceful deletion. These resources define a default period before they are forcibly terminated (the grace period) but you may override that value with the --grace-period flag, or pass --now to set a grace-period of 1. Because these resources often represent entities in the cluster, deletion may not be acknowledged immediately. If the node hosting a pod is down or cannot reach the API server, termination may take significantly longer than the grace period. To force delete a resource, you must specify the --force flag. Note: only a subset of resources support graceful deletion. In absence of the support, the --grace-period flag is ignored.
+
+ IMPORTANT: Force deleting pods does not wait for confirmation that the pod's processes have been terminated, which can leave those processes running until the node detects the deletion and completes graceful deletion. If your processes use shared storage or talk to a remote API and depend on the name of the pod to identify themselves, force deleting those pods may result in multiple processes running on different machines using the same identification which may lead to data corruption or inconsistency. Only force delete pods when you are sure the pod is terminated, or if your application can tolerate multiple copies of the same pod running at once. Also, if you force delete pods, the scheduler may place new pods on those nodes before the node has released those resources and causing those pods to be evicted immediately.
+
+ Note that the delete command does NOT do resource version checks, so if someone submits an update to a resource right when you submit a delete, their update will be lost along with the rest of the resource.
+
+ After a CustomResourceDefinition is deleted, invalidation of discovery cache may take up to 6 hours. If you don't want to wait, you might want to run "[1]karmadactl api-resources" to refresh the discovery cache.
+
+Examples:
+  # Delete a propagationpolicy using the type and name specified in propagationpolicy.json
+  [1]karmadactl delete -f ./propagationpolicy.json
+  
+  # Delete resources from a directory containing kustomization.yaml - e.g. dir/kustomization.yaml
+  [1]%!s(MISSING) delete -k dir
+  
+  # Delete resources from all files that end with '.json'
+  [1]%!s(MISSING) delete -f '*.json'
+  
+  # Delete a propagationpolicy based on the type and name in the JSON passed into stdin
+  cat propagationpolicy.json | [1]%!s(MISSING) delete -f -
+  
+  # Delete propagationpolicies and services with same names "baz" and "foo"
+  [1]%!s(MISSING) delete propagationpolicy,service baz foo
+  
+  # Delete propagationpolicies and services with label name=myLabel
+  [1]%!s(MISSING) delete propagationpolicies,services -l name=myLabel
+  
+  # Delete a propagationpolicy with minimal delay
+  [1]%!s(MISSING) delete propagationpolicy foo --now
+  
+  # Force delete a propagationpolicy on a dead node
+  [1]%!s(MISSING) delete propagationpolicy foo --force
+  
+  # Delete all propagationpolicies
+  [1]%!s(MISSING) delete propagationpolicies --all
+
+Options:
+    --all=false:
+	Delete all resources, in the namespace of the specified resource
+	types.
+
+    -A, --all-namespaces=false:
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
+
+    --cascade='background':
+	Must be "background", "orphan", or "foreground". Selects the deletion
+	cascading strategy for the dependents (e.g. Pods created by a
+	ReplicationController). Defaults to background.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-selector='':
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
+
+    -f, --filename=[]:
+	containing the resource to delete.
+
+    --force=false:
+	If true, immediately remove resources from API and bypass graceful
+	deletion. Note that immediate deletion of some resources may result in
+	inconsistency or data loss and requires confirmation.
+
+    --grace-period=-1:
+	Period of time in seconds given to the resource to terminate
+	gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can
+	only be set to 0 when --force is true (force deletion).
+
+    --ignore-not-found=false:
+	Treat "resource not found" as a successful delete. Defaults to "true"
+	when --all is specified.
+
+    -i, --interactive=false:
+	If true, delete resource only when user confirms.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process a kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    --now=false:
+	If true, resources are signaled for immediate shutdown (same as
+	--grace-period=1).
+
+    -o, --output='':
+	Output mode. Use "-o name" for shorter output (resource/name).
+
+    --raw='':
+	Raw URI to DELETE to the server.  Uses the transport specified by the
+	kubeconfig file.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --timeout=0s:
+	The length of time to wait before giving up on a delete, zero means
+	determine a timeout from the size of the object
+
+    --wait=true:
+	If true, wait for resources to be gone before returning. This waits
+	for finalizers.
+
+Usage:
+  karmadactl delete ([-f FILENAME] | [-k DIRECTORY] | TYPE [(NAME | -l label | --all)]) [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl describe ===
+
+Show details of a specific resource or group of resources in Karmada control plane or a member cluster.
+
+ Print a detailed description of the selected resources, including related resources such as events or controllers. You may select a single object by name, all objects of that type, provide a name prefix, or label selector. For example:
+
+ $ karmadactl describe TYPE NAME_PREFIX
+
+ will first check for an exact match on TYPE and NAME_PREFIX. If no such resource exists, it will output details for every resource that has a name prefixed with NAME_PREFIX.
+
+Examples:
+  # Describe a deployment in Karmada control plane
+  karmadactl describe deployment/nginx
+  
+  # Describe a pod in cluster(member1)
+  karmadactl describe pods/nginx --operation-scope=members --cluster=member1
+  
+  # Describe all pods in cluster(member1)
+  karmadactl describe pods --operation-scope=members --cluster=member1
+  
+  # Describe a pod identified by type and name in "pod.json" in cluster(member1)
+  karmadactl describe -f pod.json --operation-scope=members --cluster=member1
+  
+  # Describe pods by label name=myLabel in cluster(member1)
+  karmadactl describe po -l name=myLabel --operation-scope=members --cluster=member1
+  
+  # Describe all pods managed by the 'frontend' replication controller in cluster(member1)
+  # (rc-created pods get the name of the rc as a prefix in the pod name)
+  karmadactl describe pods frontend --operation-scope=members --cluster=member1
+
+Options:
+    -A, --all-namespaces=false:
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
+
+    --chunk-size=500:
+	Return large lists in chunks rather than all at once. Pass 0 to
+	disable.
+
+    -C, --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files containing the resource to
+	describe
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --show-events=true:
+	If true, display events related to the described object.
+
+Usage:
+  karmadactl describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME) (--operation-scope=SCOPE --cluster=CLUSTER) [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl edit ===
+
+Edit a resource from the default editor.
+
+ The edit command allows you to directly edit any API resource you can retrieve via the command-line tools. It will open the editor defined by your KUBE_EDITOR, or EDITOR environment variables, or fall back to 'vi' for Linux or 'notepad' for Windows. When attempting to open the editor, it will first attempt to use the shell that has been defined in the 'SHELL' environment variable. If this is not defined, the default shell will be used, which is '/bin/bash' for Linux or 'cmd' for Windows.
+
+ You can edit multiple objects, although changes are applied one at a time. The command accepts file names as well as command-line arguments, although the files you point to must be previously saved versions of resources.
+
+ Editing is done with the API version used to fetch the resource. To edit using a specific API version, fully-qualify the resource, version, and group.
+
+ The default format is YAML. To edit in JSON, specify "-o json".
+
+ The flag --windows-line-endings can be used to force Windows line endings, otherwise the default for your operating system will be used.
+
+ In the event an error occurs while updating, a temporary file will be created on disk that contains your unapplied changes. The most common error when updating a resource is another editor changing the resource on the server. When this occurs, you will have to apply your changes to the newer version of the resource, or update your temporary saved copy to include the latest resource version.
+
+Examples:
+  # Edit the service named 'registry'
+  karmadactl edit svc/registry
+  
+  # Use an alternative editor
+  KUBE_EDITOR="nano" karmadactl edit svc/registry
+  
+  # Edit the job 'myjob' in JSON using the v1 API format
+  karmadactl edit job.v1.batch/myjob -o json
+  
+  # Edit the deployment 'mydeployment' in YAML and save the modified config in its annotation
+  karmadactl edit deployment/mydeployment -o yaml --save-config
+  
+  # Edit the 'status' subresource for the 'mydeployment' deployment
+  karmadactl edit deployment mydeployment --subresource='status'
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --field-manager='kubectl-edit':
+	Name of the manager used to track field ownership.
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files to use to edit the resource
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --output-patch=false:
+	Output the patch if the resource is edited.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --save-config=false:
+	If true, the configuration of current object will be saved in its
+	annotation. Otherwise, the annotation will be unchanged. This flag is
+	useful when you want to perform kubectl apply on this object in the
+	future.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --subresource='':
+	If specified, edit will operate on the subresource of the requested
+	object.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --validate='strict':
+	Must be one of: strict (or true), warn, ignore (or false). "true" or
+	"strict" will use a schema to validate the input and fail the request
+	if invalid. It will perform server side validation if
+	ServerSideFieldValidation is enabled on the api-server, but will fall
+	back to less reliable client-side validation if not. "warn" will warn
+	about unknown or duplicate fields without blocking the request if
+	server-side field validation is enabled on the API server, and behave
+	as "ignore" otherwise. "false" or "ignore" will not perform any schema
+	validation, silently dropping any unknown or duplicate fields.
+
+    --windows-line-endings=false:
+	Defaults to the line ending native to your platform.
+
+Usage:
+  karmadactl edit (RESOURCE/NAME | -f FILENAME) [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl exec ===
+
+Execute a command in a container.
+
+Examples:
+  # Get output from running the 'date' command from pod mypod, using the first container by default
+  karmadactl exec mypod -- date
+  
+  # Get output from running the 'date' command from pod mypod, using the first container by default in cluster(member1)
+  karmadactl exec mypod --operation-scope=members --cluster=member1 -- date
+  
+  # Get output from running the 'date' command in ruby-container from pod mypod in cluster(member1)
+  karmadactl exec mypod -c ruby-container --operation-scope=members --cluster=member1 -- date
+  
+  # Get output from running the 'date' command in ruby-container from pod mypod in cluster(member1)
+  karmadactl exec mypod -c ruby-container --operation-scope=members --cluster=member1 -- date
+  
+  # Switch to raw terminal mode; sends stdin to 'bash' in ruby-container from pod mypod
+  # and sends stdout/stderr from 'bash' back to the client
+  karmadactl exec mypod -c ruby-container -i -t -- bash -il
+  
+  # Get output from running 'date' command from the first pod of the deployment mydeployment, using the first container by default in cluster(member1)
+  karmadactl exec deploy/mydeployment --operation-scope=members --cluster=member1 -- date
+  
+  # Get output from running 'date' command from the first pod of the service myservice, using the first container by default in cluster(member1)
+  karmadactl exec svc/myservice --operation-scope=members --cluster=member1 -- date
+
+Options:
+    --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is members, for example:
+	--operation-scope=members --cluster=member1
+
+    -c, --container='':
+	Container name. If omitted, use the
+	kubectl.kubernetes.io/default-container annotation for selecting the
+	container to be attached or the first container in the pod will be
+	chosen
+
+    -f, --filename=[]:
+	to use to exec into the resource
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+    --pod-running-timeout=1m0s:
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
+
+    -q, --quiet=false:
+	Only print output from the remote session
+
+    -i, --stdin=false:
+	Pass stdin to the container
+
+    -t, --tty=false:
+	Stdin is a TTY
+
+Usage:
+  karmadactl exec (POD | TYPE/NAME) [-c CONTAINER] (-C CLUSTER) -- COMMAND [args...] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl explain ===
+
+Describe fields and structure of various resources in Karmada control plane or a member cluster.
+
+ This command describes the fields associated with each supported API resource. Fields are identified via a simple JSONPath identifier:
+
+        `<type>.<fieldName>[.<fieldName>]`
+        
+ Information about each field is retrieved from the server in OpenAPI format.
+
+Examples:
+  # Get the documentation of the resource and its fields in Karmada control plane
+  karmadactl explain propagationpolicies
+  
+  # Get all the fields in the resource in member cluster member1
+  karmadactl explain pods --recursive --operation-scope=members --cluster=member1
+  
+  # Get the explanation for resourcebindings in supported api versions in Karmada control plane
+  karmadactl explain resourcebindings --api-version=work.karmada.io/v1alpha1
+  
+  # Get the documentation of a specific field of a resource in member cluster member1
+  karmadactl explain pods.spec.containers --operation-scope=members --cluster=member1
+  
+  # Get the documentation of resources in different format in Karmada control plane
+  karmadactl explain clusterpropagationpolicies --output=plaintext-openapiv2
+
+Options:
+    --api-version='':
+	Get different explanations for particular API version (API
+	group/version)
+
+    --cluster='':
+	Used to specify a target member cluster and only takes effect when the
+	command's operation scope is member clusters, for example:
+	--operation-scope=all --cluster=member1
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada and members. Defaults to karmada.
+
+    -o, --output='plaintext':
+	Format in which to render the schema (plaintext, plaintext-openapiv2)
+
+    --recursive=false:
+	Print the fields of fields (Currently only 1 level deep)
+
+Usage:
+  karmadactl explain TYPE [--recursive=FALSE|TRUE] [--api-version=api-version-group] [--output=plaintext|plaintext-openapiv2]  [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl get ===
+
+Display one or many resources in Karmada control plane and member clusters.
+
+ Prints a table of the most important information about the specified resources. You can filter the list using a label selector and the --selector flag. If the desired resource type is namespaced you will only see results in your current namespace unless you pass --all-namespaces.
+
+ By specifying the output as 'template' and providing a Go template as the value of the --template flag, you can filter the attributes of the fetched resources.
+
+Examples:
+  # List all pods in Karmada control plane in ps output format
+  karmadactl get pods
+  
+  # List all pods in Karmada control plane in ps output format with more information (such as node name)
+  karmadactl get pods -o wide
+  
+  # List all pods of member1 cluster in ps output format
+  karmadactl get pods --operation-scope=members --clusters=member1
+  
+  # List all pods of Karmada control plane and member1 cluster in ps output format
+  karmadactl get pods --operation-scope=all --clusters=member1
+  
+  # List a single replicasets controller with specified NAME in Karmada control plane in ps output format
+  karmadactl get replicasets nginx
+  
+  # List deployments in Karmada control plane in JSON output format, in the "v1" version of the "apps" API group
+  karmadactl get deployments.v1.apps -o json
+  
+  # Return only the phase value of the specified resource
+  karmadactl get -o template deployment/nginx --template={{.spec.replicas}}
+  
+  # List all replication controllers and services together in Karmada control plane in ps output format
+  karmadactl get rs,services
+  
+  # List one or more resources in Karmada control plane by their type and names
+  karmadactl get rs/nginx-cb87b6d88 service/kubernetes
+
+Options:
+    -A, --all-namespaces=false:
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
+
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    -C, --clusters=[]:
+	Used to specify target member clusters and only takes effect when the
+	command's operation scope is members or all, for example:
+	--operation-scope=all --clusters=member1,member2
+
+    --ignore-not-found=false:
+	If the requested object does not exist the command will return exit
+	code 0.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -L, --label-columns=[]:
+	Accepts a comma separated list of labels that are going to be
+	presented as columns. Names are case-sensitive. You can also use
+	multiple flag options like -L label1 -L label2...
+
+    -l, --labels='':
+	-l=label or -l label
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    --no-headers=false:
+	When using the default or custom-column output format, don't print
+	headers (default print headers).
+
+    -s, --operation-scope=karmada:
+	Used to control the operation scope of the command. The optional
+	values are karmada, members, and all. Defaults to karmada.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file, custom-columns, custom-columns-file, wide). See custom
+	columns
+	[https://kubernetes.io/docs/reference/kubectl/#custom-columns], golang
+	template [http://golang.org/pkg/text/template/#pkg-overview] and
+	jsonpath template
+	[https://kubernetes.io/docs/reference/kubectl/jsonpath/].
+
+    --output-watch-events=false:
+	Output watch event objects when --watch or --watch-only is used.
+	Existing objects are output as initial ADDED events.
+
+    --show-kind=false:
+	If present, list the resource type for the requested object(s).
+
+    --show-labels=false:
+	When printing, show all labels as the last column (default hide labels
+	column)
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --sort-by='':
+	If non-empty, sort list types using this field specification.  The
+	field specification is expressed as a JSONPath expression (e.g.
+	'{.metadata.name}'). The field in the API resource specified by this
+	JSONPath expression must be an integer or a string.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    -w, --watch=false:
+	After listing/getting the requested object, watch for changes.
+	Uninitialized objects are excluded if no object name is provided.
+
+    --watch-only=false:
+	Watch for changes to the requested object(s), without listing/getting
+	first.
+
+Usage:
+  karmadactl get [NAME | -l label | -n namespace] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl help ===
+
+Help provides help for any command in the application.
+Simply type karmadactl help [path to command] for full details.
+
+Usage:
+  karmadactl help [command] [flags] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl init ===
+
+Install the Karmada control plane in a Kubernetes cluster.
+
+ By default, the images and CRD tarball are downloaded remotely. For offline installation, you can set '--private-image-registry' and '--crds'.
+
+Examples:
+  # Install Karmada in Kubernetes cluster
+  # The karmada-apiserver binds the master node's IP by default
+  karmadactl init
+  
+  # China mainland registry mirror can be specified by using kube-image-mirror-country
+  karmadactl init --kube-image-mirror-country=cn
+  
+  # Kube registry can be specified by using kube-image-registry
+  karmadactl init --kube-image-registry=registry.cn-hangzhou.aliyuncs.com/google_containers
+  
+  # Specify the URL to download CRD tarball
+  karmadactl init --crds https://github.com/karmada-io/karmada/releases/download/v0.0.0-master/crds.tar.gz
+  
+  # Specify the local CRD tarball
+  karmadactl init --crds /root/crds.tar.gz
+  
+  # Use PVC to persistent storage etcd data
+  karmadactl init --etcd-storage-mode PVC --storage-classes-name {StorageClassesName}
+  
+  # Use hostPath to persistent storage etcd data. For data security, only 1 etcd pod can run in hostPath mode
+  karmadactl init --etcd-storage-mode hostPath  --etcd-replicas 1
+  
+  # Use hostPath to persistent storage etcd data but select nodes by labels
+  karmadactl init --etcd-storage-mode hostPath --etcd-node-selector-labels karmada.io/etcd=true
+  
+  # Private registry can be specified for all images
+  karmadactl init --etcd-image local.registry.com/library/etcd:3.5.16-0
+  
+  # Specify Karmada API Server IP address. If not set, the address on the master node will be used.
+  karmadactl init --karmada-apiserver-advertise-address 192.168.1.2
+  
+  # Deploy highly available(HA) karmada
+  karmadactl init --karmada-apiserver-replicas 3 --etcd-replicas 3 --etcd-storage-mode PVC --storage-classes-name {StorageClassesName}
+  
+  # Specify external IPs(load balancer or HA IP) which used to sign the certificate
+  karmadactl init --cert-external-ip 10.235.1.2 --cert-external-dns www.karmada.io
+  
+  # Install Karmada using a configuration file
+  karmadactl init --config /path/to/your/config/file.yaml
+  
+  # Pass extra arguments to Local Etcd. (Parameters are separated by commas)
+  karmadactl init --etcd-extra-args="--snapshot-count=5000,--heartbeat-interval=100"
+  # Or write them separately.
+  karmadactl init --etcd-extra-args="--snapshot-count=5000" --etcd-extra-args="--heartbeat-interval=100"
+  
+  # Pass extra arguments to Karmada API Server. (Parameters are separated by commas)
+  karmadactl init --karmada-apiserver-extra-args="--tls-min-version=VersionTLS12,--audit-log-path=-"
+  # Or write them separately.
+  karmadactl init --karmada-apiserver-extra-args="--tls-min-version=VersionTLS12" --karmada-apiserver-extra-args="--audit-log-path=-"
+  
+  # Pass extra arguments to Karmada Scheduler. (Parameters are separated by commas)
+  karmadactl init --karmada-scheduler-extra-args="--scheduler-name=test-scheduler,--enable-pprof"
+  # Or write them separately.
+  karmadactl init --karmada-scheduler-extra-args="--scheduler-name=test-scheduler" --karmada-scheduler-extra-args="--enable-pprof"
+  
+  # Pass extra arguments to Kube Controller Manager. (Parameters are separated by commas)
+  karmadactl init --kube-controller-manager-extra-args="--node-monitor-grace-period=50s,--node-monitor-period=5s"
+  # Or write them separately.
+  karmadactl init --kube-controller-manager-extra-args="--node-monitor-grace-period=50s" --kube-controller-manager-extra-args="--node-monitor-period=5s"
+  
+  # Pass extra arguments to Karmada Controller Manager. (Parameters are separated by commas)
+  karmadactl init --karmada-controller-manager-extra-args="--v=2,--enable-pprof"
+  # Or write them separately.
+  karmadactl init --karmada-controller-manager-extra-args="--v=2" --karmada-controller-manager-extra-args="--enable-pprof"
+  
+  # Pass extra arguments to Karmada Webhook. (Parameters are separated by commas)
+  karmadactl init --karmada-webhook-extra-args="--v=2,--enable-pprof"
+  # Or write them separately.
+  karmadactl init --karmada-webhook-extra-args="--v=2" --karmada-webhook-extra-args="--enable-pprof"
+  
+  # Pass extra arguments to Karmada Aggregated API Server. (Parameters are separated by commas)
+  karmadactl init --karmada-aggregated-apiserver-extra-args="--v=4,--enable-pprof"
+  # Or write them separately.
+  karmadactl init --karmada-aggregated-apiserver-extra-args="--v=4" --karmada-aggregated-apiserver-extra-args="--enable-pprof"
+
+Options:
+    --ca-cert-file='':
+	The root CA certificate file which will be used to issue new
+	certificates for Karmada components. If not set, a new self-signed
+	root CA certificate will be generated. This must be used together with
+	--ca-key-file.
+
+    --ca-key-file='':
+	The root CA private key file which will be used to issue new
+	certificates for Karmada components. If not set, a new self-signed
+	root CA key will be generated. This must be used together with
+	--ca-cert-file.
+
+    --cert-external-dns='':
+	the external DNS of Karmada certificate (e.g localhost,localhost.com)
+
+    --cert-external-ip='':
+	the external IP of Karmada certificate (e.g 192.168.1.2,172.16.1.2)
+
+    --cert-validity-period=8760h0m0s:
+	the validity period of Karmada certificate (e.g 8760h0m0s, that is 365
+	days)
+
+    --config='':
+	Karmada init file path
+
+    --context='':
+	The name of the kubeconfig context to use
+
+    --crds='https://github.com/karmada-io/karmada/releases/download/v0.0.0-master/crds.tar.gz':
+	Karmada crds resource.(local file e.g. --crds /root/crds.tar.gz)
+
+    --etcd-data='/var/lib/karmada-etcd':
+	etcd data path,valid in hostPath mode.
+
+    --etcd-extra-args=[]:
+	Additional command line arguments to pass to the etcd component. Can
+	be specified multiple times or as comma-separated values (e.g.,
+	'--snapshot-count=5000,--heartbeat-interval=100')
+
+    --etcd-image='':
+	etcd image
+
+    --etcd-node-selector-labels='':
+	the labels used for etcd pod to select nodes, valid in hostPath mode,
+	and with each label separated by a comma. ( e.g.
+	--etcd-node-selector-labels
+	karmada.io/etcd=true,kubernetes.io/os=linux)
+
+    --etcd-priority-class='system-node-critical':
+	The priority class name for the component etcd.
+
+    --etcd-pvc-size='5Gi':
+	etcd data path,valid in pvc mode.
+
+    --etcd-replicas=1:
+	etcd replica set, cluster 3,5...singular
+
+    --etcd-storage-mode='hostPath':
+	etcd data storage mode(emptyDir,hostPath,PVC). value is PVC, specify
+	--storage-classes-name
+
+    --external-etcd-ca-cert-path='':
+	The path of CA certificate of the external etcd cluster in pem format.
+
+    --external-etcd-client-cert-path='':
+	The path of client side certificate to the external etcd cluster in
+	pem format.
+
+    --external-etcd-client-key-path='':
+	The path of client side private key to the external etcd cluster in
+	pem format.
+
+    --external-etcd-key-prefix='':
+	The key prefix to be configured to kube-apiserver through
+	--etcd-prefix.
+
+    --external-etcd-servers='':
+	The server urls of external etcd cluster, to be used by kube-apiserver
+	through --etcd-servers.
+
+    --host-cluster-domain='cluster.local':
+	The cluster domain of karmada host cluster. (e.g.
+	--host-cluster-domain=host.karmada)
+
+    --image-pull-policy='IfNotPresent':
+	The image pull policy for all Karmada components container. One of
+	Always, Never, IfNotPresent. Defaults to IfNotPresent.
+
+    --image-pull-secrets=[]:
+	Image pull secrets are used to pull images from the private registry,
+	could be secret list separated by comma (e.g '--image-pull-secrets
+	PullSecret1,PullSecret2', the secrets should be pre-settled in the
+	namespace declared by '--namespace')
+
+    --karmada-aggregated-apiserver-extra-args=[]:
+	Additional command line arguments to pass to the
+	karmada-aggregated-apiserver component. Can be specified multiple
+	times or as comma-separated values (e.g., '--v=4,--enable-pprof')
+
+    --karmada-aggregated-apiserver-image='docker.io/karmada/karmada-aggregated-apiserver:v0.0.0-master':
+	Karmada aggregated apiserver image
+
+    --karmada-aggregated-apiserver-priority-class='system-node-critical':
+	The priority class name for the component
+	karmada-aggregated-apiserver.
+
+    --karmada-aggregated-apiserver-replicas=1:
+	Karmada aggregated apiserver replica set
+
+    --karmada-apiserver-advertise-address='':
+	The IP address the Karmada API Server will advertise it's listening
+	on. If not set, the address on the master node will be used.
+
+    --karmada-apiserver-extra-args=[]:
+	Additional command line arguments to pass to the karmada-apiserver
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--tls-min-version=VersionTLS12,--audit-log-path=-')
+
+    --karmada-apiserver-image='':
+	Kubernetes apiserver image
+
+    --karmada-apiserver-priority-class='system-node-critical':
+	The priority class name for the component karmada-apiserver.
+
+    --karmada-apiserver-replicas=1:
+	Karmada apiserver replica set
+
+    --karmada-controller-manager-extra-args=[]:
+	Additional command line arguments to pass to the
+	karmada-controller-manager component. Can be specified multiple times
+	or as comma-separated values (e.g., '--v=2,--enable-pprof')
+
+    --karmada-controller-manager-image='docker.io/karmada/karmada-controller-manager:v0.0.0-master':
+	Karmada controller manager image
+
+    --karmada-controller-manager-priority-class='system-node-critical':
+	The priority class name for the component karmada-controller-manager.
+
+    --karmada-controller-manager-replicas=1:
+	Karmada controller manager replica set
+
+    -d, --karmada-data='/etc/karmada':
+	Karmada data path. kubeconfig cert and crds files
+
+    --karmada-kube-controller-manager-extra-args=[]:
+	Additional command line arguments to pass to the
+	karmada-kube-controller-manager component. Can be specified multiple
+	times or as comma-separated values (e.g.,
+	'--node-monitor-grace-period=50s,--node-monitor-period=5s')
+
+    --karmada-kube-controller-manager-image='':
+	Kubernetes controller manager image
+
+    --karmada-kube-controller-manager-priority-class='system-node-critical':
+	The priority class name for the component
+	karmada-kube-controller-manager.
+
+    --karmada-kube-controller-manager-replicas=1:
+	Karmada kube controller manager replica set
+
+    --karmada-pki='/etc/karmada/pki':
+	Karmada pki path. Karmada cert files
+
+    --karmada-scheduler-extra-args=[]:
+	Additional command line arguments to pass to the karmada-scheduler
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--scheduler-name=test-scheduler,--enable-pprof')
+
+    --karmada-scheduler-image='docker.io/karmada/karmada-scheduler:v0.0.0-master':
+	Karmada scheduler image
+
+    --karmada-scheduler-priority-class='system-node-critical':
+	The priority class name for the component karmada-scheduler.
+
+    --karmada-scheduler-replicas=1:
+	Karmada scheduler replica set
+
+    --karmada-webhook-extra-args=[]:
+	Additional command line arguments to pass to the karmada-webhook
+	component. Can be specified multiple times or as comma-separated
+	values (e.g., '--v=2,--enable-pprof')
+
+    --karmada-webhook-image='docker.io/karmada/karmada-webhook:v0.0.0-master':
+	Karmada webhook image
+
+    --karmada-webhook-priority-class='system-node-critical':
+	The priority class name for the component karmada-webhook.
+
+    --karmada-webhook-replicas=1:
+	Karmada webhook replica set
+
+    --kube-image-mirror-country='':
+	Country code of the kube image registry to be used. For Chinese
+	mainland users, set it to cn
+
+    --kube-image-registry='':
+	Kube image registry. For Chinese mainland users, you may use local
+	gcr.io mirrors such as
+	registry.cn-hangzhou.aliyuncs.com/google_containers to override
+	default kube image registry
+
+    --kube-image-tag='v1.35.2':
+	Choose a specific Kubernetes version for the control plane.
+
+    --kubeconfig='':
+	absolute path to the kubeconfig file
+
+    -n, --namespace='karmada-system':
+	Kubernetes namespace
+
+    -p, --port=32443:
+	Karmada apiserver service node port
+
+    --private-image-registry='':
+	Private image registry where pull images from. If set, all required
+	images will be downloaded from it, it would be useful in offline
+	installation scenarios.  In addition, you still can use
+	--kube-image-registry to specify the registry for Kubernetes's images.
+
+    --storage-classes-name='':
+	Kubernetes StorageClasses Name
+
+    --wait-component-ready-timeout=120:
+	Wait for karmada component ready timeout. 0 means wait forever
+
+Usage:
+  karmadactl init [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl interpret ===
+
+Validate, test and edit interpreter customization before applying it to the control plane.
+        
+  1.  Validate the ResourceInterpreterCustomization configuration as per API schema and try to load the scripts for syntax check.
+  2.  Run the rules locally and test if the result is expected. Similar to the dry run.
+  3.  Edit customization. Similar to the kubectl edit.
+
+Examples:
+  # Check the customizations in file (only YAML and JSON formats are supported)
+  karmadactl interpret -f customization.json --check
+  
+  # Execute the retention rule
+  karmadactl interpret -f customization.yml --operation retain --desired-file desired.yml --observed-file observed.yml
+  
+  # Execute the replicaResource rule
+  karmadactl interpret -f customization.yml --operation interpretReplica --observed-file observed.yml
+  
+  # Execute the componentResource rule
+  karmadactl interpret -f customization.yml --operation interpretComponent --observed-file observed.yml
+  
+  # Execute the replicaRevision rule
+  karmadactl interpret -f customization.yml --operation reviseReplica --observed-file observed.yml --desired-replica 2
+  
+  # Execute the statusReflection rule
+  karmadactl interpret -f customization.yml --operation interpretStatus --observed-file observed.yml
+  
+  # Execute the healthInterpretation rule
+  karmadactl interpret -f customization.yml --operation interpretHealth --observed-file observed.yml
+  
+  # Execute the dependencyInterpretation rule
+  karmadactl interpret -f customization.yml --operation interpretDependency --observed-file observed.yml
+  
+  # Execute the statusAggregation rule
+  karmadactl interpret -f customization.yml --operation aggregateStatus --observed-file observed.yml --status-file status.yml
+  
+  # Fetch observed object from url, and status items from stdin (specified with -)
+  karmadactl interpret -f customization.yml --operation aggregateStatus --observed-file https://example.com/observed.yml --status-file -
+  
+  # Edit customization
+  karmadactl interpret -f customization.yml --edit
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --check=false:
+	Validates the given ResourceInterpreterCustomization configuration(s)
+
+    --desired-file='':
+	Filename, directory, or URL to files identifying the resource to use
+	as desiredObj argument in rule script.
+
+    --desired-replica=0:
+	The desiredReplica argument in rule script.
+
+    --edit=false:
+	Edit customizations
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files containing the customizations.
+	Files need to be in either YAML or JSON format.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --observed-file='':
+	Filename, directory, or URL to files identifying the resource to use
+	as observedObj argument in rule script.
+
+    --operation='':
+	The interpret operation to use. One of:
+	(Retain,InterpretReplica,InterpretComponent,ReviseReplica,InterpretStatus,AggregateStatus,InterpretHealth,InterpretDependency)
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --show-doc=false:
+	Show document of rules when editing
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --status-file='':
+	Filename, directory, or URL to files identifying the resource to use
+	as statusItems argument in rule script.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+Usage:
+  karmadactl interpret (-f FILENAME) (--operation OPERATION) [--ARGS VALUE]...  [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl join ===
+
+Register a cluster to Karmada control plane with Push mode.
+
+Examples:
+  # Join cluster into karmada control plane, if '--cluster-context' not specified, take the cluster name as the context
+  karmadactl join CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG>
+
+Options:
+    --cluster-context='':
+	Name of cluster context in kubeconfig. The current context is used by
+	default.
+
+    --cluster-kubeconfig='':
+	Path of the cluster's kubeconfig.
+
+    --cluster-namespace='karmada-cluster':
+	Namespace in the control plane where member cluster secrets are
+	stored.
+
+    --cluster-provider='':
+	Provider of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across providers for higher
+	availability.
+
+    --cluster-region='':
+	The region of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across regions for higher
+	availability.
+
+    --cluster-zones=[]:
+	The zones of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across zones for higher availability.
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-as='':
+	Username to impersonate for the operation in karmada control plane.
+	User could be a regular user or a service account in a namespace.
+
+    --karmada-as-group=[]:
+	Group to impersonate for the operation in karmada control plane, this
+	flag can be repeated to specify multiple groups.
+
+    --karmada-as-uid='':
+	UID to impersonate for the operation in karmada control plane.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+Usage:
+  karmadactl join CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG> [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl label ===
+
+Update the labels on a resource.
+
+  *  A label key and value must begin with a letter or number, and may contain letters, numbers, hyphens, dots, and underscores, up to 63 characters each.
+  *  Optionally, the key can begin with a DNS subdomain prefix and a single '/', like example.com/my-app.
+  *  If --overwrite is true, then existing labels can be overwritten, otherwise attempting to overwrite a label will result in an error.
+  *  If --resource-version is specified, then updates will use this resource version, otherwise the existing resource-version will be used.
+
+Examples:
+  # Update deployment 'foo' with the label 'resourcetemplate.karmada.io/deletion-protected' and the value 'Always'
+  [1]karmadactl label deployment foo resourcetemplate.karmada.io/deletion-protected=Always
+  
+  # Update deployment 'foo' with the label 'resourcetemplate.karmada.io/deletion-protected' and the value '', overwriting any existing value
+  [1]%!s(MISSING) label --overwrite deployment foo resourcetemplate.karmada.io/deletion-protected=
+  
+  # Update all deployment in the namespace
+  [1]%!s(MISSING) label pp --all resourcetemplate.karmada.io/deletion-protected=
+  
+  # Update a deployment identified by the type and name in "deployment.json"
+  [1]%!s(MISSING) label -f deployment.json resourcetemplate.karmada.io/deletion-protected=
+  
+  # Update deployment 'foo' only if the resource is unchanged from version 1
+  [1]%!s(MISSING) label deployment resourcetemplate.karmada.io/deletion-protected=Always --resource-version=1
+  
+  # Update deployment 'foo' by removing a label named 'bar' if it exists
+  # Does not require the --overwrite flag
+  [1]%!s(MISSING) label deployment foo resourcetemplate.karmada.io/deletion-protected-
+
+Options:
+    --all=false:
+	Select all resources, in the namespace of the specified resource types
+
+    -A, --all-namespaces=false:
+	If true, check the specified action in all namespaces.
+
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-label':
+	Name of the manager used to track field ownership.
+
+    --field-selector='':
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files identifying the resource to
+	update the labels
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    --list=false:
+	If true, display the labels for a given resource.
+
+    --local=false:
+	If true, label will NOT contact api-server but run locally.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    --overwrite=false:
+	If true, allow labels to be overwritten, otherwise reject label
+	updates that overwrite existing labels.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --resource-version='':
+	If non-empty, the labels update will only succeed if this is the
+	current resource-version for the object. Only valid when specifying a
+	single resource.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+Usage:
+  karmadactl label [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl logs ===
+
+Print the logs for a container in a pod in a member cluster or specified resource. If the pod has only one container, the container name is optional.
+
+Examples:
+  # Return snapshot logs from pod nginx with only one container in cluster(member1)
+  karmadactl logs nginx -C=member1
+  
+  # Return snapshot logs from pod nginx with multi containers in cluster(member1)
+  karmadactl logs nginx --all-containers=true -C=member1
+  
+  # Return snapshot logs from all containers in pods defined by label app=nginx in cluster(member1)
+  karmadactl logs -l app=nginx --all-containers=true -C=member1
+  
+  # Return snapshot of previous terminated ruby container logs from pod web-1 in cluster(member1)
+  karmadactl logs -p -c ruby web-1 -C=member1
+  
+  # Begin streaming the logs of the ruby container in pod web-1 in cluster(member1)
+  karmadactl logs -f -c ruby web-1 -C=member1
+  
+  # Begin streaming the logs from all containers in pods defined by label app=nginx in cluster(member1)
+  karmadactl logs -f -l app=nginx --all-containers=true -C=member1
+  
+  # Display only the most recent 20 lines of output in pod nginx in cluster(member1)
+  karmadactl logs --tail=20 nginx -C=member1
+  
+  # Show all logs from pod nginx written in the last hour in cluster(member1)
+  karmadactl logs --since=1h nginx -C=member1
+
+Options:
+    --all-containers=false:
+	Get all containers' logs in the pod(s).
+
+    --all-pods=false:
+	Get logs from all pod(s). Sets prefix to true.
+
+    -C, --cluster='':
+	Specify a member cluster
+
+    -c, --container='':
+	Print the logs of this container
+
+    -f, --follow=false:
+	Specify if the logs should be streamed.
+
+    --ignore-errors=false:
+	If watching / following pod logs, allow for any errors that occur to
+	be non-fatal
+
+    --insecure-skip-tls-verify-backend=false:
+	Skip verifying the identity of the kubelet that logs are requested
+	from.  In theory, an attacker could provide invalid log content back.
+	You might want to use this if your kubelet serving certificates have
+	expired.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --limit-bytes=0:
+	Maximum bytes of logs to return. Defaults to no limit.
+
+    --max-log-requests=5:
+	Specify maximum number of concurrent logs to follow when using by a
+	selector. Defaults to 5.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    --pod-running-timeout=20s:
+	The length of time (like 5s, 2m, or 3h, higher than zero) to wait
+	until at least one pod is running
+
+    --prefix=false:
+	Prefix each log line with the log source (pod name and container name)
+
+    -p, --previous=false:
+	If true, print the logs for the previous instance of the container in
+	a pod if it exists.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --since=0s:
+	Only return logs newer than a relative duration like 5s, 2m, or 3h.
+	Defaults to all logs. Only one of since-time / since may be used.
+
+    --since-time='':
+	Only return logs after a specific date (RFC3339). Defaults to all
+	logs. Only one of since-time / since may be used.
+
+    --tail=-1:
+	Lines of recent log file to display. Defaults to -1 with no selector,
+	showing all log lines otherwise 10, if a selector is provided.
+
+    --timestamps=false:
+	Include timestamps on each line in the log output
+
+Usage:
+  karmadactl logs [-f] [-p] (POD | TYPE/NAME) [-c CONTAINER] (-C CLUSTER) [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl options ===
+
+
+
+=== karmadactl patch ===
+
+Update fields of a resource using strategic merge patch, a JSON merge patch, or a JSON patch.
+
+ JSON and YAML formats are accepted.
+
+ Note: Strategic merge patch is not supported for custom resources.
+
+Examples:
+  # Partially update a deployment using a strategic merge patch, specifying the patch as JSON
+  [1]karmadactl patch deployment nginx-deployment -p '{"spec":{"replicas":2}}'
+  
+  # Partially update a deployment using a strategic merge patch, specifying the patch as YAML
+  [1]%!s(MISSING) patch deployment nginx-deployment -p $'spec:\n replicas: 2'
+  
+  # Partially update a deployment identified by the type and name specified in "deployment.json" using strategic merge patch
+  [1]%!s(MISSING) patch -f deployment.json -p '{"spec":{"replicas":2}}'
+  
+  # Update a propagationpolicy's conflictResolution using a JSON patch with positional arrays
+  [1]%!s(MISSING) patch pp nginx-propagation --type='json' -p='[{"op": "replace", "path": "/spec/conflictResolution", "value":"Overwrite"}]'
+  
+  # Update a deployment's replicas through the 'scale' subresource using a merge patch
+  [1]%!s(MISSING) patch deployment nginx-deployment --subresource='scale' --type='merge' -p '{"spec":{"replicas":2}}'
+
+Options:
+    --allow-missing-template-keys=true:
+	If true, ignore any errors in templates when a field or map key is
+	missing in the template. Only applies to golang and jsonpath output
+	formats.
+
+    --dry-run='none':
+	Must be "none", "server", or "client". If client strategy, only print
+	the object that would be sent, without sending it. If server strategy,
+	submit server-side request without persisting the resource.
+
+    --field-manager='kubectl-patch':
+	Name of the manager used to track field ownership.
+
+    -f, --filename=[]:
+	Filename, directory, or URL to files identifying the resource to
+	update
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -k, --kustomize='':
+	Process the kustomization directory. This flag can't be used together
+	with -f or -R.
+
+    --local=false:
+	If true, patch will operate on the content of the file, not the
+	server-side resource.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -o, --output='':
+	Output format. One of: (json, yaml, kyaml, name, go-template,
+	go-template-file, template, templatefile, jsonpath, jsonpath-as-json,
+	jsonpath-file).
+
+    -p, --patch='':
+	The patch to be applied to the resource JSON file.
+
+    --patch-file='':
+	A file containing a patch to be applied to the resource.
+
+    -R, --recursive=false:
+	Process the directory used in -f, --filename recursively. Useful when
+	you want to manage related manifests organized within the same
+	directory.
+
+    --show-managed-fields=false:
+	If true, keep the managedFields when printing objects in JSON or YAML
+	format.
+
+    --subresource='':
+	If specified, patch will operate on the subresource of the requested
+	object.
+
+    --template='':
+	Template string or path to template file to use when -o=go-template,
+	-o=go-template-file. The template format is golang templates
+	[http://golang.org/pkg/text/template/#pkg-overview].
+
+    --type='strategic':
+	The type of patch being provided; one of [json merge strategic]
+
+Usage:
+  karmadactl patch (-f FILENAME | TYPE NAME) [-p PATCH|--patch-file FILE] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+Deprecated flags:
+
+      [DEPRECATED] --record
+                           --record will be removed in the future
+
+
+=== karmadactl promote ===
+
+Promote resources from legacy clusters to Karmada control plane. Requires the cluster has been joined or registered.
+
+ If the resource already exists in Karmada control plane, please edit PropagationPolicy and OverridePolicy to propagate it.
+
+Examples:
+  # Promote deployment(default/nginx) from cluster1 to Karmada
+  karmadactl promote deployment nginx -n default -C cluster1
+  
+  # Promote deployment(default/nginx) with gvk from cluster1 to Karmada
+  karmadactl promote deployment.v1.apps nginx -n default -C cluster1
+  
+  # Dumps the artifacts but does not deploy them to Karmada, same as 'dry run'
+  karmadactl promote deployment nginx -n default -C cluster1 -o yaml|json
+  
+  # Promote secret(default/default-token) from cluster1 to Karmada
+  karmadactl promote secret default-token -n default -C cluster1
+  
+  # Support to use '--dependencies=true' or '-d=true' to promote resource with its dependencies automatically, default to false
+  karmadactl promote deployment nginx -n default -C cluster1 -d=true
+  
+  # Support to use '--cluster-kubeconfig' to specify the configuration of member cluster
+  karmadactl promote deployment nginx -n default -C cluster1 --cluster-kubeconfig=<CLUSTER_KUBECONFIG_PATH>
+  
+  # Support to use '--cluster-kubeconfig' and '--cluster-context' to specify the configuration of member cluster
+  karmadactl promote deployment nginx -n default -C cluster1 --cluster-kubeconfig=<CLUSTER_KUBECONFIG_PATH> --cluster-context=<CLUSTER_CONTEXT>
+
+Options:
+    --auto-create-policy=true:
+	Automatically create a PropagationPolicy for namespace-scoped
+	resources or create a ClusterPropagationPolicy for cluster-scoped
+	resources.
+
+    -C, --cluster='':
+	the name of legacy cluster (eg -C=member1)
+
+    --cluster-context='':
+	Context name of legacy cluster in kubeconfig. Only works when there
+	are multiple contexts in the kubeconfig.
+
+    --cluster-kubeconfig='':
+	Path of the legacy cluster's kubeconfig.
+
+    -d, --dependencies=false:
+	Promote resource with its dependencies automatically, default to false
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    -o, --output='':
+	Output format. One of: json|yaml
+
+    --policy-name='':
+	The name of the PropagationPolicy(or ClusterPropagationPolicy) that is
+	automatically created after promotion. If not specified, the name will
+	be the resource name with a hash suffix that is generated by resource
+	metadata.
+
+Usage:
+  karmadactl promote <RESOURCE_TYPE> <RESOURCE_NAME> -n <NAME_SPACE> -C <CLUSTER_NAME> [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl register ===
+
+Register a cluster to Karmada control plane with Pull mode.
+
+Examples:
+  # Register cluster into karmada control plane with Pull mode.
+  # If '--cluster-name' isn't specified, the cluster of current-context will be used by default.
+  karmadactl register [karmada-apiserver-endpoint] --cluster-name=<CLUSTER_NAME> --token=<TOKEN>  --discovery-token-ca-cert-hash=<CA-CERT-HASH>
+  
+  # The 'karmada-apiserver-endpoint' argument is an address of the Karmada API server from which info will be fetched.
+  # It should be provided in the format '<host>:<port>'.
+  karmadactl register 172.18.0.2:5443 --cluster-name=<CLUSTER_NAME> --token=<TOKEN> --discovery-token-ca-cert-hash=<CA-CERT-HASH>
+  
+  # UnsafeSkipCAVerification allows token-based discovery without CA verification via CACertHashes. This can weaken
+  # the security of register command since other clusters can impersonate the control-plane.
+  karmadactl register [karmada-apiserver-endpoint] --token=<TOKEN> --discovery-token-unsafe-skip-ca-verification=true
+
+Options:
+    --cert-expiration-seconds=31536000:
+	The expiration time of certificate.
+
+    --cluster-name='':
+	The name of member cluster in the control plane, if not specified, the
+	cluster of current-context is used by default.
+
+    --cluster-namespace='karmada-cluster':
+	Namespace in the control plane where member cluster secrets are
+	stored.
+
+    --cluster-provider='':
+	Provider of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across providers for higher
+	availability.
+
+    --cluster-region='':
+	The region of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across regions for higher
+	availability.
+
+    --cluster-zones=[]:
+	The zones of the joining cluster. The Karmada scheduler can use this
+	information to spread workloads across zones for higher availability.
+
+    --context='':
+	Name of the cluster context in kubeconfig file.
+
+    --discovery-timeout=5m0s:
+	The timeout to discovery karmada apiserver client.
+
+    --discovery-token-ca-cert-hash=[]:
+	For token-based discovery, validate that the root CA public key
+	matches this hash (format: "<type>:<value>").
+
+    --discovery-token-unsafe-skip-ca-verification=false:
+	For token-based discovery, allow joining without
+	--discovery-token-ca-cert-hash pinning.
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --enable-cert-rotation=false:
+	Enable means controller would rotate certificate for karmada-agent
+	when the certificate is about to expire.
+
+    --karmada-agent-image='docker.io/karmada/karmada-agent:v0.0.0-master':
+	Karmada agent image.
+
+    --karmada-agent-replicas=1:
+	Karmada agent replicas.
+
+    --kubeconfig='':
+	Path to the kubeconfig file of member cluster.
+
+    -n, --namespace='karmada-system':
+	Namespace the karmada-agent component deployed.
+
+    --proxy-server-address='':
+	Address of the proxy server that is used to proxy to the cluster.
+
+    --token='':
+	For token-based discovery, the token used to validate cluster
+	information fetched from the API server.
+
+Usage:
+  karmadactl register [karmada-apiserver-endpoint] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl taint ===
+
+Update the taints on one or more clusters.
+
+  *  A taint consists of a key, value, and effect. As an argument here, it is expressed as key=value:effect.
+  *  The key must begin with a letter or number, and may contain letters, numbers, hyphens, dots, and underscores, up to 253 characters.
+  *  Optionally, the key can begin with a DNS subdomain prefix and a single '/', like example.com/my-app.
+  *  The value is optional. If given, it must begin with a letter or number, and may contain letters, numbers, hyphens, dots, and underscores, up to  63 characters.
+  *  The effect must be NoSchedule, PreferNoSchedule or NoExecute.
+  *  Currently taint can only apply to cluster.
+
+Examples:
+  # Update cluster 'foo' with a taint with key 'dedicated' and value 'special-user' and effect 'NoSchedule'
+  # If a taint with that key and effect already exists, its value is replaced as specified
+  karmadactl taint clusters foo dedicated=special-user:NoSchedule
+  
+  # Remove from cluster 'foo' the taint with key 'dedicated' and effect 'NoSchedule' if one exists
+  karmadactl taint clusters foo dedicated:NoSchedule-
+  
+  # Remove from cluster 'foo' all the taints with key 'dedicated'
+  karmadactl taint clusters foo dedicated-
+  
+  # Add to cluster 'foo' a taint with key 'bar' and no value
+  karmadactl taint clusters foo bar:NoSchedule
+
+Options:
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --overwrite=false:
+	If true, allow taints to be overwritten, otherwise reject taint
+	updates that overwrite existing taints.
+
+Usage:
+  karmadactl taint CLUSTER NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_N [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl token ===
+
+This command manages bootstrap tokens. It is optional and needed only for advanced use cases.
+
+ In short, bootstrap tokens are used for establishing bidirectional trust between a client and a server. A bootstrap token can be used when a client (for example a member cluster that is about to join control plane) needs to trust the server it is talking to. Then a bootstrap token with the "signing" usage can be used. bootstrap tokens can also function as a way to allow short-lived authentication to the API Server (the token serves as a way for the API Server to trust the client), for example for doing the TLS Bootstrap.
+
+ What is a bootstrap token more exactly? - It is a Secret in the kube-system namespace of type "bootstrap.kubernetes.io/token". - A bootstrap token must be of the form "[a-z0-9]{6}.[a-z0-9]{16}". The former part is the public token ID, while the latter is the Token Secret and it must be kept private at all circumstances! - The name of the Secret must be named "bootstrap-token-(token-id)".
+
+ This command is same as 'kubeadm token', but it will create tokens that are used by member clusters.
+
+Examples:
+  # Create a token and print the full 'karmadactl register' flag needed to join the cluster using the token.
+  karmadactl token create --print-register-command
+
+Available Commands:
+  create        Create bootstrap tokens on the server
+  delete        Delete bootstrap tokens on the server
+  list          List bootstrap tokens on the server
+
+Use "karmadactl token <command> --help" for more information about a given command.
+
+
+=== karmadactl token create ===
+
+This command will create a bootstrap token for you. You can specify the usages for this token, the "time to live" and an optional human friendly description.
+
+ This should be a securely generated random token of the form "[a-z0-9]{6}.[a-z0-9]{16}".
+
+Options:
+    --description='':
+	A human friendly description of how this token is used.
+
+    --groups=[system:bootstrappers:karmada:default-cluster-token]:
+	Extra groups that this token will authenticate as when used for
+	authentication. Must match
+	"\\Asystem:bootstrappers:[a-z0-9:-]{0,255}[a-z0-9]\\z"
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --print-register-command=false:
+	Instead of printing only the token, print the full 'karmadactl
+	register' flag needed to register the member cluster using the token.
+
+    --ttl=24h0m0s:
+	The duration before the token is automatically deleted (e.g. 1s, 2m,
+	3h). If set to '0', the token will never expire
+
+    --usages=[signing,authentication]:
+	Describes the ways in which this token can be used. You can pass
+	--usages multiple times or provide a comma separated list of options.
+	Valid options: [signing,authentication]
+
+Usage:
+  karmadactl token create [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl token delete ===
+
+This command will delete a list of bootstrap tokens for you.
+
+ The [token-value] is the full Token of the form "[a-z0-9]{6}.[a-z0-9]{16}" or the Token ID of the form "[a-z0-9]{6}" to delete.
+
+Options:
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+Usage:
+  karmadactl token delete [token-value] ... [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl token list ===
+
+This command will list all bootstrap tokens for you.
+
+Options:
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+Usage:
+  karmadactl token list [flags] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl top ===
+
+Display Resource (CPU/Memory) usage of member clusters.
+
+ The top command allows you to see the resource consumption for pods of member clusters.
+
+ This command requires karmada-metrics-adapter to be correctly configured and working on the Karmada control plane and Metrics Server to be correctly configured and working on the member clusters.
+
+Available Commands:
+  node          Display resource (CPU/memory) usage of nodes
+  pod           Display resource (CPU/memory) usage of pods of member clusters
+
+Usage:
+  karmadactl top [flags] [options]
+
+Use "karmadactl top <command> --help" for more information about a given command.
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl top node ===
+
+Display resource (CPU/memory) usage of nodes in member clusters.
+
+ The top-node command allows you to see the resource consumption of nodes.
+
+Aliases:
+node, nodes, no
+
+Examples:
+  # Show metrics for all nodes in the default namespace
+  karmadactl top node
+  
+  # Show metrics for all nodes in the default namespace in member1 cluster
+  karmadactl top node --clusters=member1
+  
+  # Show metrics for all nodes in the default namespace in member1 and member2 cluster
+  karmadactl top node --clusters=member1,member2
+  
+  # Show metrics for all nodes in the given namespace
+  karmadactl top node --namespace=NAMESPACE
+  
+  # Show metrics for the nodes defined by label name=myLabel
+  karmadactl top node -l name=myLabel
+
+Options:
+    --clusters=[]:
+	Used to specify target member clusters, for example:
+	--clusters=member1,member2
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --no-headers=false:
+	If present, print output without headers
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --show-capacity=false:
+	Print node resources based on Capacity instead of Allocatable(default)
+	of the nodes.
+
+    --sort-by='':
+	If non-empty, sort nodes list using specified field. The field can be
+	either 'cpu' or 'memory'.
+
+    --use-protocol-buffers=true:
+	Enables using protocol-buffers to access Metrics API.
+
+Usage:
+  karmadactl top node [NAME | -l label] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl top pod ===
+
+Display resource (CPU/memory) usage of pods.
+
+ The 'top pod' command allows you to see the resource consumption of pods of member clusters.
+
+ Due to the metrics pipeline delay, they may be unavailable for a few minutes since pod creation.
+
+Aliases:
+pod, pods, po
+
+Examples:
+  # Show metrics for all pods in the default namespace
+  karmadactl top pod
+  
+  # Show metrics for all pods in the default namespace in member1 cluster
+  karmadactl top pod --clusters=member1
+  
+  # Show metrics for all pods in the default namespace in member1 and member2 cluster
+  karmadactl top pod --clusters=member1,member2
+  
+  # Show metrics for all pods in the given namespace
+  karmadactl top pod --namespace=NAMESPACE
+  
+  # Show metrics for a given pod and its containers
+  karmadactl top pod POD_NAME --containers
+  
+  # Show metrics for the pods defined by label name=myLabel
+  karmadactl top pod -l name=myLabel
+
+Options:
+    -A, --all-namespaces=false:
+	If present, list the requested object(s) across all namespaces.
+	Namespace in current context is ignored even if specified with
+	--namespace.
+
+    -C, --clusters=[]:
+	-C=member1,member2
+
+    --containers=false:
+	If present, print usage of containers within a pod.
+
+    --field-selector='':
+	Selector (field query) to filter on, supports '=', '==', and
+	'!='.(e.g. --field-selector key1=value1,key2=value2). The server only
+	supports a limited number of field queries per type.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    -n, --namespace='':
+	If present, the namespace scope for this CLI request.
+
+    --no-headers=false:
+	If present, print output without headers.
+
+    -l, --selector='':
+	Selector (label query) to filter on, supports '=', '==', '!=', 'in',
+	'notin'.(e.g. -l key1=value1,key2=value2,key3 in (value3)). Matching
+	objects must satisfy all of the specified label constraints.
+
+    --sort-by='':
+	If non-empty, sort pods list using specified field. The field can be
+	either 'cpu' or 'memory'.
+
+    --sum=false:
+	Print the sum of the resource usage
+
+    --use-protocol-buffers=true:
+	Enables using protocol-buffers to access Metrics API.
+
+Usage:
+  karmadactl top pod [NAME | -l label] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl uncordon ===
+
+Mark cluster as schedulable.
+
+Examples:
+  # Mark cluster "foo" as schedulable.
+  karmadactl uncordon foo
+
+Options:
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+Usage:
+  karmadactl uncordon CLUSTER [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl unjoin ===
+
+Remove a cluster from Karmada control plane.
+
+Examples:
+  # Unjoin cluster from karmada control plane, but not to remove resources created by karmada in the unjoining cluster
+  karmadactl unjoin CLUSTER_NAME
+  
+  # Unjoin cluster from karmada control plane and attempt to remove resources created by karmada in the unjoining cluster
+  karmadactl unjoin CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG>
+  
+  # Unjoin cluster from karmada control plane with timeout
+  karmadactl unjoin CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG> --wait 2m
+
+Options:
+    --cluster-context='':
+	Context name of cluster in kubeconfig. Only works when there are
+	multiple contexts in the kubeconfig.
+
+    --cluster-kubeconfig='':
+	Path of the cluster's kubeconfig.
+
+    --cluster-namespace='karmada-cluster':
+	Namespace in the control plane where member cluster secrets are
+	stored.
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --force=false:
+	When set, the unjoin command will attempt to clean up resources in the
+	member cluster before deleting the Cluster object. If the cleanup
+	fails within the timeout period, the Cluster object will still be
+	deleted, potentially leaving some resources behind in the member
+	cluster.
+
+    --karmada-context='':
+	The name of the kubeconfig context to use
+
+    --kubeconfig='':
+	Path to the kubeconfig file to use for CLI requests.
+
+    --wait=1m0s:
+	wait for the unjoin command execution process(default 60s), if there
+	is no success after this time, timeout will be returned.
+
+Usage:
+  karmadactl unjoin CLUSTER_NAME --cluster-kubeconfig=<KUBECONFIG> [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl unregister ===
+
+Unregister removes a member cluster from Karmada, it will clean up the cluster object in the control plane and Karmada resources in the member cluster.
+
+Examples:
+  # Unregister cluster from karmada control plane
+  karmadactl unregister CLUSTER_NAME --cluster-kubeconfig=<CLUSTER_KUBECONFIG> [--cluster-context=<CLUSTER_CONTEXT>]
+  
+  # Unregister cluster from karmada control plane with timeout
+  karmadactl unregister CLUSTER_NAME --cluster-kubeconfig=<CLUSTER_KUBECONFIG> --wait 2m
+  
+  # Unregister cluster from karmada control plane, manually specify the location of the karmada config
+  karmadactl unregister CLUSTER_NAME --karmada-config=<KARMADA_CONFIG> [--karmada-context=<KARMADA_CONTEXT>] --cluster-kubeconfig=<CLUSTER_KUBECONFIG> [--cluster-context=<CLUSTER_CONTEXT>]
+
+Options:
+    --agent-name='karmada-agent':
+	Deployment name of the karmada-agent component deployed.
+
+    --cluster-context='':
+	Context in cluster-kubeconfig to access unregistering member cluster,
+	optional, defaults to current context.
+
+    --cluster-kubeconfig='':
+	KUBECONFIG file path to access unregistering member cluster, required.
+
+    --cluster-namespace='karmada-cluster':
+	Namespace in the control plane where member cluster secrets are
+	stored.
+
+    --dry-run=false:
+	Run the command in dry-run mode, without making any server requests.
+
+    --karmada-config='':
+	Path of config to access karmada-apiserver, optional, defaults to
+	fetch automatically from member cluster.
+
+    --karmada-context='':
+	Context in karmada-config to access karmada-apiserver, optional,
+	defaults to current context.
+
+    -n, --namespace='karmada-system':
+	Namespace of the karmada-agent component deployed.
+
+    --wait=1m0s:
+	wait for the unjoin command execution process(default 60s), if there
+	is no success after this time, timeout will be returned.
+
+Usage:
+  karmadactl unregister CLUSTER_NAME [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).
+
+
+=== karmadactl version ===
+
+Print the version information.
+
+Examples:
+  # Print karmadactl command version
+  karmadactl version
+
+Usage:
+  karmadactl version [flags] [options]
+
+Use "karmadactl options" for a list of global command-line options (applies to all commands).

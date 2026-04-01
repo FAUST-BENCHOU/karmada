@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2021 The Karmada Authors.
+# Copyright 2024 The Karmada Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,21 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 set -o errexit
 set -o nounset
 set -o pipefail
 
 REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+OUTPUT_DIR="${REPO_ROOT}/docs/command-flags"
 
-# vendor should be updated first because we build code-gen tools from vendor.
-bash "$REPO_ROOT/hack/update-vendor.sh"
-bash "$REPO_ROOT/hack/update-codegen.sh"
-bash "$REPO_ROOT/hack/update-crdgen.sh"
-bash "$REPO_ROOT/hack/update-estimator-protobuf.sh"
-bash "$REPO_ROOT/hack/update-import-aliases.sh"
-bash "$REPO_ROOT/hack/update-swagger-docs.sh"
-bash "$REPO_ROOT/hack/update-lifted.sh"
-bash "$REPO_ROOT/hack/update-command-line-flags.sh"
-bash "$REPO_ROOT/hack/update-mocks.sh"
-bash "$REPO_ROOT/hack/update-gofmt.sh"
+# Build the flag extraction tool
+echo "Building flag extraction tool..."
+cd "${REPO_ROOT}"
+go build -o "${REPO_ROOT}/_tmp/extract-flags" "${REPO_ROOT}/hack/tools/extract-flags/main.go"
+
+# Run the tool to generate flags documentation
+# Use LANG=C to ensure English output (kubectl i18n uses LANG/LC_MESSAGES for translations)
+echo "Extracting command-line flags from all components..."
+mkdir -p "${OUTPUT_DIR}"
+LANG=C "${REPO_ROOT}/_tmp/extract-flags" "${OUTPUT_DIR}"
+
+echo "Command-line flags documentation generated: docs/command-flags/"

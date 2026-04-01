@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Copyright 2021 The Karmada Authors.
+# Copyright 2024 The Karmada Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,21 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Compare docs/command-flags (extract) vs docs/binary-command-flags (binary --help):
+# strip extract-only Deprecated flags sections, normalize whitespace, diff semantics.
+#
+# Usage:
+#   hack/compare-command-flags-dirs.sh [REF_DIR] [OTHER_DIR]
+# Defaults: docs/command-flags docs/binary-command-flags
 
 set -o errexit
 set -o nounset
 set -o pipefail
 
-REPO_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+SCRIPT_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+REF_DIR="${1:-${SCRIPT_ROOT}/docs/command-flags}"
+OTHER_DIR="${2:-${SCRIPT_ROOT}/docs/binary-command-flags}"
 
-# vendor should be updated first because we build code-gen tools from vendor.
-bash "$REPO_ROOT/hack/update-vendor.sh"
-bash "$REPO_ROOT/hack/update-codegen.sh"
-bash "$REPO_ROOT/hack/update-crdgen.sh"
-bash "$REPO_ROOT/hack/update-estimator-protobuf.sh"
-bash "$REPO_ROOT/hack/update-import-aliases.sh"
-bash "$REPO_ROOT/hack/update-swagger-docs.sh"
-bash "$REPO_ROOT/hack/update-lifted.sh"
-bash "$REPO_ROOT/hack/update-command-line-flags.sh"
-bash "$REPO_ROOT/hack/update-mocks.sh"
-bash "$REPO_ROOT/hack/update-gofmt.sh"
+exec python3 "${SCRIPT_ROOT}/hack/tools/compare-command-flags-dirs.py" "${REF_DIR}" "${OTHER_DIR}"

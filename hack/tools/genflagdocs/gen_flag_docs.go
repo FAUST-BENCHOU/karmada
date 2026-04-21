@@ -41,15 +41,11 @@ import (
 )
 
 func printUsage() {
-	fmt.Fprintf(os.Stderr, `usage: %s <output-directory> <component> [subcommand ...]
+	fmt.Fprintf(os.Stderr, `usage: %s <output-directory> <component>
 
 Generate cobra markdown flag/command reference for a Karmada component or CLI.
 
-  <component>           One of the supported component names (see below).
-  [subcommand ...]     Optional path from the component root command (e.g.
-                       "create namespace" for karmadactl). When omitted, docs
-                       are generated from the root command (full tree when the
-                       root has subcommands).
+  <component>   One of the supported component names (see below).
 
 Supported components:
 `, os.Args[0])
@@ -101,46 +97,15 @@ var componentFactories = map[string]func() *cobra.Command{
 	},
 }
 
-func findSubcommand(root *cobra.Command, parts []string) (*cobra.Command, error) {
-	cur := root
-	for _, want := range parts {
-		var next *cobra.Command
-		for _, child := range cur.Commands() {
-			if !child.IsAvailableCommand() || child.IsAdditionalHelpTopicCommand() {
-				continue
-			}
-			if child.Name() == want {
-				next = child
-				break
-			}
-			for _, a := range child.Aliases {
-				if a == want {
-					next = child
-					break
-				}
-			}
-			if next != nil {
-				break
-			}
-		}
-		if next == nil {
-			return nil, fmt.Errorf("subcommand %q not found under %q", want, cur.CommandPath())
-		}
-		cur = next
-	}
-	return cur, nil
-}
-
 func main() {
 	// use os.Args instead of "flags" because "flags" will mess up the man pages!
-	if len(os.Args) < 3 {
+	if len(os.Args) != 3 {
 		printUsage()
 		os.Exit(1)
 	}
 
 	path := os.Args[1]
 	component := os.Args[2]
-	sub := os.Args[3:]
 
 	outDir, err := lifted.OutDir(path)
 	if err != nil {
@@ -157,26 +122,16 @@ func main() {
 
 	// Construct the root command once: karmadactl registers klog flags at construction time and panics if built twice in one process.
 	rootCmd := factory()
-	workCmd := rootCmd
-	if len(sub) > 0 {
-		workCmd, err = findSubcommand(rootCmd, sub)
-		if err != nil {
-			fmt.Fprint(os.Stderr, err.Error())
-			os.Exit(1)
-		}
-	}
 
-	workCmd.DisableAutoGenTag = true
-	if err = doc.GenMarkdownTree(workCmd, outDir); err != nil {
+	rootCmd.DisableAutoGenTag = true
+	if err = doc.GenMarkdownTree(rootCmd, outDir); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to generate docs: %v\n", err)
 		os.Exit(1)
 	}
 
-	if len(sub) == 0 {
-		if err = tryGenGroupedCommandIndex(rootCmd, outDir); err != nil {
-			fmt.Fprintf(os.Stderr, "failed to generate grouped command index: %v\n", err)
-			os.Exit(1)
-		}
+	if err = tryGenGroupedCommandIndex(rootCmd, outDir); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to generate grouped command index: %v\n", err)
+		os.Exit(1)
 	}
 
 	indexBasename := ""
@@ -191,7 +146,7 @@ func main() {
 		}
 		return cleanupForInclude(md)
 	}
-	if err = MarkdownPostProcessing(workCmd, outDir, proc); err != nil {
+	if err = MarkdownPostProcessing(rootCmd, outDir, proc); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to cleanup docs: %v\n", err)
 		os.Exit(1)
 	}

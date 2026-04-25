@@ -66,6 +66,9 @@ const (
 	// KarmadaControllerManagerComponentName is the name of the Karmada Controller Manager component.
 	KarmadaControllerManagerComponentName = "karmada-controller-manager"
 
+	// KarmadactlComponentName is the name of the karmadactl CLI.
+	KarmadactlComponentName = "karmadactl"
+
 	// KubeControllerManagerComponentName is the name of the Kube Controller Manager component.
 	KubeControllerManagerComponentName = "kube-controller-manager"
 
